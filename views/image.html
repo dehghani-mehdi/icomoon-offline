@@ -1,0 +1,283 @@
+<div ng-show="tab === 'select.image'">
+	<div ng-if="visiblePanels.imageHeight === true" class="overlay" ng-click="visiblePanels.imageHeight = false">
+		<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+		<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.imageHeight = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+		<fieldset class="clearfix">
+			<label ng-click="r2Clicked = false" class="unit btn5 fgc3 size1of1 mbl" ng-class="r1Focused ? 'fgc10' : ''">
+				<i class="icon-radio-{{imagePref.overrideSize ? 'unchecked' : 'checked'}}"></i>
+				<input name="overrideSize" value="" class="visuallyhidden" type="radio" ng-model="imagePref.overrideSize" ng-focus="r1Focused = true" ng-blur="r1Focused = false">
+				Auto <span class="transparent">(use preview sizes)</span>
+			</label>
+			<div class="unit fgc3 size1of1">
+				<label ng-click="r2Clicked = true" class="unit btn5" ng-class="r2Focused ? 'fgc10' : ''">
+					<i class="icon-radio-{{imagePref.overrideSize ? 'checked' : 'unchecked'}}"></i>
+					<input name="overrideSize" value="true" class="visuallyhidden" type="radio" ng-model="imagePref.overrideSize" ng-focus="r2Focused = true" ng-blur="r2Focused = false">
+				Manual <span class="transparent">(px)</span>
+				</label>
+				<label mi-focus-when="{{r2Clicked === true}}">
+				<mi-number ng-click="imagePref.overrideSize = true" class="border-box talign-center miNumber unitRight width3" model="imagePref.height" max="9999" min="1" def="32"></mi-number>
+				</label>
+			</div>
+		</fieldset>
+		</div>
+	</div>
+	<div ng-if="visiblePanels.getcode2 === true" class="overlay" ng-click="visiblePanels.getcode2 = false">
+		<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+		<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.getcode2 = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+		<label ng-if="embedCodes.html" mi-focus-when="{{visiblePanels.getcode2}}" class="blk mbl">HTML (SVG &lt;use&gt;)
+			<input class="fgc3 textbox1 ff-code size1of1 border-box" type="text" mi-select-all="" readonly="readonly" value="{{embedCodes.html}}">
+		</label>
+		<label class="blk {{embedCodes.css ? 'mbl' : ''}}">Symbol Definition(s)
+			<textarea wrap="off" rows="{{embedCodes.defLines || 3}}" class="fgc3 textbox1 noOverflow-v ff-code size1of1 border-box" readonly="readonly" mi-select-all="">{{embedCodes.def}}</textarea>
+		</label>
+		<label class="blk" ng-if="embedCodes.css">CSS
+			<textarea wrap="off" rows="{{embedCodes.cssLines || 3}}" class="fgc3 textbox1 noOverflow-v ff-code size1of1 border-box" readonly="readonly" mi-select-all="">{{embedCodes.css}}</textarea>
+		</label>
+        <p class="mbn"><a target="_blank" href="https://icomoon.io/#docs/inline-svg"><i class="icon-info"></i> Learn about using inline SVGs</a></p>
+		</div>
+	</div>
+	<div ng-if="visiblePanels.imagePref === true" class="overlay" ng-click="visiblePanels.imagePref = false">
+		<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+		<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.imagePref = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+		<div class="m0-fs7">
+			<fieldset class="clearfix">
+				<div class="clearfix">
+				<label class="unit size1of1 mbm" mi-focus-when="{{visiblePanels.imagePref}}">
+					<span class="blk">Name</span>
+					<input maxlength="31" mi-focus-when="{{visiblePanels.imagePref}}" type="text" ng-model="imagePref.name" placeholder="icomoon" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box">
+				</label>
+				<label class="unit size3of7 mbm">
+					<span class="blk">Class Prefix</span>
+					<input type="text" ng-model="imagePref.prefix" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box">
+				</label>
+				<label class="unitRight size3of7 mbm">
+					<span class="blk">Class Suffix</span>
+					<input type="text" ng-model="imagePref.postfix" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box">
+				</label>
+				</div>
+				<div class="clearfix">
+				<label class="unit size1of1 btn5 fgc3 animated-margin pvt mtm" ng-class="{mbm: imagePref.useClassSelector, 'fgc10': classSelectorFocused}">
+					<i class="{{imagePref.useClassSelector ? 'icon-checked' : 'icon-unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="imagePref.useClassSelector" ng-focus="classSelectorFocused = true" ng-blur="classSelectorFocused = false">
+					Use class selector <span class="fs7 fgc3">(instead of attribute selector)</span>
+				</label>
+				<label ng-show="imagePref.useClassSelector" class="mbm">
+					<input type="text" class="size1of1 border-box" ng-model="imagePref.classSelector" ng-model-options="{updateOn: 'blur'}" placeholder=".icon">
+				</label>
+                <label class="unit btn5 fgc3 size1of1 pvt mtm" ng-class="numPrefixFocused ? 'fgc10' : ''">
+					<i class="icon-{{imagePref.numPrefix ? 'checked' : 'unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="imagePref.numPrefix" ng-focus="numPrefixFocused = true" ng-blur="numPrefixFocused = false">
+                    Add number prefix <span class="fs7 fgc3">(e.g.: 0001-home.svg)</span>
+				</label>
+				<label class="unit btn5 fgc3 size1of1 pvt mtm" ng-class="minifyFocused ? 'fgc10' : ''">
+					<i class="icon-{{imagePref.minifyJs ? 'checked' : 'unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="imagePref.minifyJs" ng-focus="minifyFocused = true" ng-blur="minifyFocused = false">
+					Minify JS code <span class="fs7 fgc3">(for SVG &lt;use&gt; polyfill)</span>
+				</label>
+				</div>
+				<div class="clearfix">
+					<label class="unit btn5 fgc3 pvt mtm animated-margin" ng-class="{fgc10: overrideFocused}">
+						<i class="icon-{{imagePref.overrideSize ? 'checked' : 'unchecked'}}"></i>
+						<input class="visuallyhidden" type="checkbox" ng-model="imagePref.overrideSize" ng-focus="overrideFocused = true" ng-blur="overrideFocused = false">
+						Override size <span ng-show="imagePref.overrideSize" class="fgc4">(pixels)</span>
+					</label>
+					<label ng-show="imagePref.overrideSize" class="unitRight mtm">
+						<mi-number class="border-box talign-center miNumber unitRight width3" model="imagePref.height" max="9999" min="1" def="32"></mi-number>
+					</label>
+				</div>
+				<div class="clearfix">
+					<label class="unit btn5 fgc3 pvt mvm" ng-class="{fgc10: bgColorFocused}">
+						<i class="icon-{{imagePref.addBgColor ? 'checked' : 'unchecked'}}"></i>
+						<input class="visuallyhidden" type="checkbox" ng-model="imagePref.addBgColor" ng-focus="bgColorFocused = true" ng-blur="bgColorFocused = false">
+						Add background color <span ng-show="imagePref.addBgColor" class="fgc4">(hex)</span>
+					</label>
+					<label ng-show="imagePref.addBgColor" class="unitRight mtm">
+						<mi-number class="border-box talign-center miNumber unitRight width3" zpad="6" radix="16" model="imagePref.bgColor" min="0" max="16777215"></mi-number>
+					</label>
+				<label class="unit size1of1">
+					<span class="unit ptt">Color <span class="fgc4">(hex)</span></span>
+					<mi-number class="border-box talign-center miNumber unitRight width3" zpad="6" radix="16" model="imagePref.color" min="0" max="16777215"></mi-number>
+				</label>
+				</div>
+                <h1 class="fs5 mlnm" ng-class="{fgc10: formatsFocused, mbn: fontPref.hideFormats}">
+                    <label class="hoverE0">
+                        <i class="btn5 icon-{{!fontPref.hideFormats ? 'bottom' : 'right'}}"></i>
+                        <input class="visuallyhidden" type="checkbox" ng-model="fontPref.hideFormats" ng-focus="formatsFocused = true" ng-blur="formatsFocused = false">
+                        Formats to Include
+                    </label>
+                </h1>
+                <fieldset ng-hide="fontPref.hideFormats" class="clearfix">
+                    <label class="unit btn5 fgc3 size1of1 pvt mbm" ng-class="pdfFocused ? 'fgc10' : ''">
+                        <i class="icon-{{imagePref.pdf ? 'checked' : 'unchecked'}}"></i>
+                        <input class="visuallyhidden" type="checkbox" ng-model="imagePref.pdf" ng-focus="pdfFocused = true" ng-blur="pdfFocused = false">
+                        PDF
+                    </label>
+                    <label class="unit btn5 fgc3 size1of1 pvt mbm" ng-class="pngFocused ? 'fgc10' : ''">
+                        <i class="icon-{{imagePref.png ? 'checked' : 'unchecked'}}"></i>
+                        <input class="visuallyhidden" type="checkbox" ng-model="imagePref.png" ng-focus="pngFocused = true" ng-blur="pngFocused = false">
+                        PNG
+                    </label>
+                    <label class="unit btn5 fgc3 size1of1 pvt mbm" ng-class="polymerFocused ? 'fgc10' : ''">
+                        <i class="icon-{{imagePref.polymer ? 'checked' : 'unchecked'}}"></i>
+                        <input class="visuallyhidden" type="checkbox" ng-model="imagePref.polymer" ng-focus="polymerFocused = true" ng-blur="polymerFocused = false">
+                        Polymer
+                    </label>
+                    <label class="unit btn5 fgc3 size1of1 pvt mbm" ng-class="xamlFocused ? 'fgc10' : ''">
+                        <i class="icon-{{imagePref.xaml ? 'checked' : 'unchecked'}}"></i>
+                        <input class="visuallyhidden" type="checkbox" ng-model="imagePref.xaml" ng-focus="xamlFocused = true" ng-blur="xamlFocused = false">
+                        XAML
+                    </label>
+                    <label class="unit btn5 fgc3 size1of1 pvt mbm" ng-class="cshFocused ? 'fgc10' : ''">
+                        <i class="icon-{{imagePref.csh ? 'checked' : 'unchecked'}}"></i>
+                        <input class="visuallyhidden" type="checkbox" ng-model="imagePref.csh" ng-focus="cshFocused = true" ng-blur="cshFocused = false">
+                        Photoshop Custom Shapes (CSH)
+                    </label>
+                    <label class="unit btn5 fgc3 size1of1 pvt animated-margin" ng-class="{fgc10: spriteFocused, mbm: imagePref.sprite}">
+                        <i class="icon-{{imagePref.sprite ? 'checked' : 'unchecked'}}"></i>
+                        <input class="visuallyhidden" type="checkbox" ng-model="imagePref.sprite" ng-focus="spriteFocused = true" ng-blur="spriteFocused = false">
+                        Tiles (CSS sprite)
+                    </label>
+                    <label ng-show="imagePref.sprite" class="unit size1of1 mbm">
+                        <span class="unit ptt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sprite columns</span>
+                        <mi-number class="border-box talign-center miNumber unitRight width3" model="imagePref.columns" min="1" def="16"></mi-number>
+                    </label>
+                    <label ng-show="imagePref.sprite" class="unit size1of1">
+                        <span class="unit ptt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Margin <span class="fgc4">(pixels)</span></span>
+                        <mi-number class="border-box talign-center miNumber unitRight width3" model="imagePref.margin" min="0" def="16"></mi-number>
+                    </label>
+                </fieldset>
+			</fieldset>
+		</div>
+		</div>
+	</div> <!-- End of Preferences Panel -->
+	<div class="w-main phm">
+		<svg class="hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<defs>
+		<symbol ng-repeat="glyph in glyphs" id="iconDemo-{{glyph.glyphName}}" mi-view-box="0 0 {{glyph.viewBox.width}} {{glyph.viewBox.height}}">
+			<title>{{glyph.glyphName}}</title>
+			<path ng-repeat="path in glyph.paths" class="path{{$index}}" mi-d="{{path.d}}" mi-fill="{{path.attrs && (path.attrs.fill || 'inherit')}}" mi-stroke="{{glyph.icon.attrs && (glyph.icon.attrs[$index].stroke || 'inherit')}}" mi-stroke-width="{{glyph.icon.attrs && (glyph.icon.attrs[$index].strokeWidth)}}" mi-stroke-linecap="{{glyph.icon.attrs && (glyph.icon.attrs[$index].strokeLinecap)}}" mi-stroke-linejoin="{{glyph.icon.attrs && (glyph.icon.attrs[$index].strokeLinejoin)}}" mi-stroke-miterlimit="{{glyph.icon.attrs && (glyph.icon.attrs[$index].strokeMiterlimit)}}" mi-opacity="{{path.attrs && (path.attrs.opacity || '1')}}"></path>
+		</symbol>
+		</defs>
+		</svg>
+		<h1 class="rel fs3 mtn m1-fs5 print-hidden">
+			<label>
+				<i class="btn5 mrs icon-{{pref.showQuickUse2 ? 'bottom' : 'right'}}"></i>
+				<input class="hidden" type="checkbox" ng-model="pref.showQuickUse2">
+				<span class="noOverflow3"><span class="hoverE0">Quick Usage <span class="fs6-fixed">and</span> Sharing</span>
+					<span ng-show="imagePref.autoHost" class="fs6-fixed ff0 mls fgc4"><i class="mrs icon-{{quickUsage.icon}}"></i>{{quickUsage.statusMessage}}</span>
+				</span>
+			</label>
+		</h1>
+		<div class="clearfix fgc3 print-hidden" ng-if="imagePref.autoHost && pref.showQuickUse2">
+			<h1 ng-show="cloudAccess || pref.imageUploadTime" for="ref" class="blk mvn fs4">Development Links
+			</h1>
+			<textarea wrap="off" rows="2" id="ref" class="textbox1 fgc3 noOverflow ff-code size1of1 border-box" readonly="readonly" mi-select-all="">{{quickUsage.ref || quickUsage.placeholder}}</textarea>
+            <p class="mvn" ng-show="quickUsage.url">
+                <a class="prs" target="_blank" href="{{quickUsage.url.slice(0, -13).replace('public/', 'public/reference.html#/') + 'svg'}}">reference.html</a>
+                | <a class="prs" target="_blank" href="{{quickUsage.url.slice(0, -13) + 'selection-svg.json'}}">selection.json</a>
+                | <a class="phs" target="_blank" href="{{quickUsage.url.slice(0, -13) + 'symbol-defs.svg'}}">symbol-defs.json</a>
+            </p>
+			<p class="mtm" ng-show="cloudAccess">Do not use these links in production.</p><p>
+			</p><p class="mtm" ng-hide="cloudAccess"><span class="fgc0">Expires in 24 hours</span>. To get permanent unchanging links, <a target="_blank" href="https://icomoon.io/#premium">Go Premium</a>.</p>
+			<div ng-show="quickUsage.ref2 || pref.imageUploadTime">
+				<h1 class="fs4 mbn">Production Links</h1>
+				<p class="mtn mbm">Last uploaded on <span class="fgc1" ng-bind="pref.imageUploadTime"></span> <button class="btn6" ng-click="host()" ng-disabled="quickUsage.uploading">
+				<i class="icon-upload iconfont-zero-baseline"></i> {{quickUsage.uploading || 'Update'}}</button></p>
+				<label for="ref2" class="unit width1 mrs">
+                    <a ng-if="quickUsage.url2 !== '...'" target="_blank" href="{{quickUsage.url2}}"><i class="mrs icon-infinite"></i></a>
+                    <svg ng-if="quickUsage.url2 === '...'" class="mrs icon-spinner spinner"><use xlink:href="#icon-spinner"></use></svg>
+                    Amazon S3<br>
+                </label>
+				<div class="lastUnit">
+					<textarea wrap="off" rows="2" id="ref2" class="textbox1 mbm fgc3 noOverflow ff-code size1of1 border-box" readonly="readonly" mi-select-all="">{{quickUsage.ref2 || quickUsage.placeholder}}</textarea>
+				</div>
+				<label for="ref3" class="unit width1 mrs">
+                    <a ng-if="quickUsage.url3 !== '...'" target="_blank" href="{{quickUsage.url3}}"><i class="mrs icon-infinite"></i></a>
+                    <svg ng-if="quickUsage.url3 === '...'" class="mrs icon-spinner spinner"><use xlink:href="#icon-spinner"></use></svg>
+                    CloudFront<br>
+                </label>
+				<div class="lastUnit">
+					<textarea wrap="off" rows="2" id="ref3" class="textbox1 fgc3 noOverflow ff-code size1of1 border-box" readonly="readonly" mi-select-all="">{{quickUsage.ref3 || quickUsage.placeholder}}</textarea>
+				</div>
+				<!--p class="mtm"><i class="icon-info mrs"></i>Updating files on CloudFront takes 10 to 15 minutes.</p-->
+			</div>
+			<div class="pbl mtm">
+				<button class="btn6 phn mrl" ng-click="imagePref.autoHost = false">Disable Quick Usage</button>
+				<form class="iblk" action="https://codepen.io/pen/define" method="POST" target="_blank">
+				  <input type="hidden" name="data" value="{{onlineEditor.data}}">
+				  <button type="submit" ng-disabled="!onlineEditor.data || onlineEditor.disabled" class="btn6 pan">
+				  <i class="icon-codepen mrs"></i>View on CodePen
+				  </button>
+				</form>
+			</div>
+		</div>
+		<div class="pbl clearfix print-hidden" ng-if="!imagePref.autoHost && pref.showQuickUse2">
+			<p class="mvn w-text"><button class="phn btn6 pvn lh-def bshadow-ul3" ng-click="host({onlyDev: true, enable: true})">Enable Quick Usage</button> to upload SVGs for hosting or sharing. Using this feature, you can reference SVGs in your HTML and easily change your icon selection on the fly, without having to update your CSS.</p>
+		</div>
+		<h1 class="rel fs3 m1-fs5 print-hidden">
+			<label>
+				<i class="btn5 mrs icon-{{pref.showSVGs ? 'bottom' : 'right'}}"></i>
+				<input class="hidden" type="checkbox" ng-model="pref.showSVGs">
+				<span class="hoverE0">SVGs: {{glyphs.length}}
+				</span>
+			</label>
+            <button class="btn6 fs6-fixed ff0 transparent pvn" ng-show="size" ng-click="getEmbedCode()">svg defs size: {{size}}</button>
+		</h1>
+		<div ng-show="pref.showSVGs">
+		<p ng-show="!glyphSets.length">Nothing to show! Please <a href="#/select">select</a> some icons first.</p>
+		<div id="imageSet{{$index}}" class="mbm clearfix" ng-repeat="glyphs in glyphSets">
+			<mi-style>
+			#imageSet{{$index}} .fs-prevSize {
+				font-size: {{glyphs[0].properties.prevSize}}px;
+			}
+			#imageSet{{$index}} svg {
+				color: #{{getHexColor(imagePref.color || 0)}};
+				fill: currentcolor;
+				stroke: currentcolor;
+			}
+			.icon-{{$index}} {
+				height: {{glyphs[0].properties.prevSize}}px;
+			}
+			</mi-style>
+			<h1 class="ff0 mtn fs6 fgc4 bshadow-ul2">
+				Grid Size: {{glyphs.grid || 'Unknown'}}
+				<!-- <button ng-show="!glyphs.grid" class="btn5 fgc4 transparent phm"><i class="icon-reset2"></i></button> -->
+				<mi-presets mi-tooltip="{marginBottom: 12, marginRight: 12, text: 'Preview Size'}" class="prevSize mtn unitRight numberPresets fs6-fixed lh-def ff0" model="glyphs[0].properties.prevSize" min="6" max="80" presets="getMultiples(glyphs.grid)"></mi-presets>
+			</h1>
+			<div class="glyph unit clearfix pbs fs-prevSize hoverE-hidden-parent" ng-repeat="glyph in glyphs" ng-show="!search || searchResults[glyph.setId][glyph.iconIdx]">
+				<div class="clearfix rel">
+				<div class="rel unit size1of1 bshadow-ul0 clearfix noOverflow fs-prevSize">
+					<div class="glyphNameWrapper">
+						<svg ng-click="editGlyph(glyph)" class="cursor-pointer icon-{{$parent.$index}} iblk" style="width: {{glyph.w2hratio}}em">
+						<use mi-xlink-href="#iconDemo-{{glyph.glyphName}}"></use></svg>
+						<span class="invisible">uniE</span>
+						<span mi-blur-on-enter="" tabindex="1" spellcheck="false" class="ff0 glyphName mls" mi-editable="" mi-unique="glyphNames" mi-tags="" ng-model="glyph.properties.name" mi-model-delay="blur" style="left: {{glyph.w2hratio}}em"></span>
+					</div>
+				</div>
+				<button ng-click="removeGlyph(glyph)" class="glyph-button btn5 fs6-fixed ptn"><i class="icon-cancel2"></i><span class="visuallyhidden">Remove Glyph</span></button>
+				<button ng-click="getEmbedCode(glyph)" class="unit fs6-fixed btn5 pln hoverE-hidden-target2"><i class="icon-code mrs"></i>Get Code</button>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+		<div class="pln bar-btm talign-center print-hidden">
+			<div class="w-main phm m0-phn">
+			<span class="btn9 iblk size1of3 m0-size2of5 sep-left selected rel">
+                <span class="fs7 fgc4 absl size1of1 top-left lh3 mts cursor-default"><span class="iblk noOverflow2 size4of5">SVG<span ng-if="imagePref.pdf">, PDF</span><span ng-if="imagePref.png">, PNG</span><span ng-if="imagePref.polymer">, Polymer</span><span ng-if="imagePref.xaml">, XAML</span><span ng-if="imagePref.csh">, CSH</span></span></span><button ng-click="download()" class="btn4 iblk width1" ng-disabled="downloading" class="btn4"><span ng-if="!downloading">Download</span><span ng-if="downloading">Loading&hellip;</span></button>
+				<button class="absl btn6 fgc4 lh-def mls pht m1-hidden" ng-click="visiblePanels.imagePref = true"><i class="icon-cog"></i></button>
+			</span><a href="#/select" class="btn9 size1of3 m0-size1of5 rel">Select<span class="m0-hidden">ion</span><span class="m1-hidden"> ({{getSelectionCount()}})</span><span class="chevron-right m0-hidden absl top-right layer-front"></span><span class="chevron-left m0-hidden absl top-left layer-front"></span></a><a href="#/select/font" class="btn9 iblk size1of3 m0-size2of5 sep-right {{getSelectionCount() === 0 ? 'transparent-more': ''}}">
+				<span class="m1-hidden">Generate </span>Font<i class="mls icon-font icon-low"></i>
+			</a>
+			</div>
+		</div>
+</div>

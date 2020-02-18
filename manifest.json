@@ -1,0 +1,19 @@
+{
+   "app": {
+      "launch": {
+         "local_path": "index.html"
+      }
+   },
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+   "description": "Browse & manage vector icons; download them in SVG, Polymer, Font, PDF, CSH & more. You can import your own vectors too.",
+   "icons": {
+      "128": "favicon-128.png",
+      "16": "favicon-16.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7wk1n+NNBZRbY14/lrTpreSGwXH87lmSc2RkuAJm0vKcbHV26QGdXHdDxiiejVZZmAUOBmvJzQ5xjCL4PkvNjCmEFLnkgn4Nc6InYpErZqEjU1nY9JT6RpSlzHQfRBmvLw+CjLNT7G9VfAcYCUdty5efEVCfjqywelLu/h1v81wIDAQAB",
+   "manifest_version": 2,
+   "name": "IcoMoon",
+   "offline_enabled": true,
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.102.1"
+}

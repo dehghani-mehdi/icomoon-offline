@@ -1,0 +1,705 @@
+<div class="mode-{{mode}}" mi-file-over="">
+	<div class="bar-top print-hidden" id="toolbar">
+		<div class="rel">
+			<button class="unit btn0 mlm mrl m0-mrs m0-mlm" mi-popup="focus">
+				<i class="icon-menu"></i>
+				<span class="visuallyhidden">Menu</span>
+			</button>
+			<ul class="w-menu absl layer-front2 menuList1 mtxl ptm talign-left hidden">
+				<!-- <li><button ng-click="newProject()"><i class="icon-new mrs"></i>New Project</button></li> -->
+				<li><a href="#/projects"><i class="icon-stack mrs"></i>Manage Projects</a></li>
+				<li><button ng-click="newSetFromSelection([], true)"><i class="icon-new2 mrs"></i>New Empty Set</button></li>
+				<li><button ng-click="newSetFromSelection(false, true)"><i class="icon-new-set mrs"></i>New Set From Selection</button></li>
+				<li><button ng-click="clearSelection()"><i class="icon-clear mrs"></i>Clear Selection ({{getSelectionCount()}})</button></li>
+				<li><a href="#/select/library"><i class="icon-library mrs"></i>Icon Library</a></li>
+				<li ng-hide="signedIn"><a href="https://icomoon.io/#login"><i class="icon-enter mrs"></i>Sign In</a></li>
+				<li><a target="_blank" href="https://icomoon.io/#docs"><i class="icon-question mrs"></i>Documentation</a></li>
+				<li ng-show="signedIn"><a href="https://i.icomoon.io/logout"><i class="icon-exit mrs"></i>Sign Out</a></li>
+				<li ng-if="!!expiration"><button ng-click="showWarning()"><i class="icon-warning mrs fgc-{{expiration}}"></i>{{expMessage}}</button></li>
+			</ul>
+		</div>
+		<div class="w-main phm clearfix m0-phn">
+		<header ng-if="tab === 'select.library'" class="unit ptt mrl"><h1 class="fs4 mvn lh1 unit m0-mls m0-fs5">Library</h1></header>
+		<div ng-show="tab === 'select'" class="unit mrl m0-mrs">
+		<div class="file unit" id="file">
+			<mi-file type-regex=".svg|.json|text|plain" focused="importFocused" on-open="import(files)"></mi-file>
+			<div class="btn8 size1of1 m0-phm" ng-class="importFocused ? 'focused': ''">
+				<i class="icon-import mrs m0-hidden"></i>
+				<span>Import<span class="m0-hidden"> Icons</span></span>
+			</div>
+		</div>
+        <a mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t', text: 'Icon Library'}" href="#/select/library" class="m1-hidden unit mls btn8">
+                <i class="icon-library"></i>
+        </a>
+		</div>
+		<div ng-show="tab === 'select.font'">
+		<!-- <mi-presets class="unit numberPresets mrl m0-mrs" model="pref.prevSize" def="pref.prevSize || 32" min="6" max="64" presets="[16, 32, 48, 64]"><i class="icon-eye mls fgc3"></i></mi-presets> -->
+		<div class="fgc3 btnBar">
+		<label mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t', text: 'Show Codes'}" class="{{pref.showCodes ? 'btn0-embossed' : 'btn0'}}" ng-class="{focused: codesFocused}">
+			<i class="icon-unicode"></i>
+			<input class="visuallyhidden" type="checkbox" ng-model="pref.showCodes" ng-focus="codesFocused = true" ng-blur="codesFocused = false">
+		</label>
+		<label mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t', text: 'Show Ligatures'}" class="{{pref.showLiga ? 'btn0-embossed' : 'btn0'}} mrl m0-mrs" ng-class="{focused: ligaFocused}">
+			<i class="icon-liga"></i>
+			<input class="visuallyhidden" type="checkbox" ng-model="pref.showLiga" ng-focus="ligaFocused = true" ng-blur="ligaFocused = false">
+		</label>
+		</div>
+		<button id="pref" class="unit btn0 mrl m0-mrs" ng-click="visiblePanels.fontPref = true">
+			<i class="icon-cog m0-phm"></i>
+			<span class="m0-hidden mls">Preferences</span>
+		</button>
+		<button class="unit btn0 mrl m0-mrn m0-phm" ng-click="visiblePanels.reset = true">
+			<i class="icon-reset m0-phm"></i>
+            <span class="m0-hidden mls" mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t', text: 'Reset Codes or Ligatures'}">Reset</span>
+		</button>
+		</div>
+		<div ng-show="tab === 'select.image'">
+		<div id="imageHeight" class="unit mls width1">Size:
+			<button class="btn6 phn pbt bshadow-ul3 mls" ng-click="visiblePanels.imageHeight = true">
+				{{imagePref.overrideSize ? (imagePref.height + 'px') : 'Auto'}}
+			</button>
+		</div>
+		<button class="unit btn0 mrl m0-mrs m0-width1" ng-click="visiblePanels.imagePref = true">
+			<i class="icon-cog m0-phm"></i>
+			<span class="m0-hidden mls">Preferences</span>
+		</button>
+		</div>
+		<div ng-show="tab === 'select'">
+		<div class="btnBar mrl unit m1-mrn print-hidden">
+		<button ng-click="mode = 'select'" mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t',
+		text: '{{::tooltips.selectMode}}'}" class="unit {{mode === 'select' ? 'btn2-embossed' : 'btn0'}}">
+			<i class="icon-select"></i>
+			<span class="visuallyhidden">select</span>
+		</button>
+		<button ng-click="mode = 'delete'" mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t',
+		text: '{{::tooltips.delMode}}'}" class="unit {{mode === 'delete' ? 'btn1-embossed' : 'btn0'}}">
+			<i class="icon-delete"></i>
+			<span class="visuallyhidden">delete</span>
+		</button>
+		<button ng-click="mode = 'move'" mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t', text: 'Move'}" class="unit {{mode === 'move' ? 'btn7-embossed' : 'btn0'}}">
+			<i class="icon-move"></i>
+			<span class="visuallyhidden">move</span>
+		</button>
+		<button ng-click="mode = 'edit'" mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t',
+		text: '{{::tooltips.editMode}}'}" class="unit {{mode === 'edit' ? 'btn3-embossed' : 'btn0'}}">
+			<i class="icon-edit"></i>
+			<span class="visuallyhidden">edit</span>
+		</button>
+		</div>
+		</div>
+		<div class="search-history m1-mtm m1-size1of1" ng-show="tab !== 'select.library'">
+		<label class="unit layer-front rel m0-mlm">
+			<svg ng-if="externalSets.icon" class="absl mas icon-spinner spinner"><use xlink:href="#icon-spinner"></use></svg>
+			<i ng-show="!externalSets.icon" class="icon-search fgc3 pls absl top-left lh-def ptt"></i>
+			<input id="search" mi-blur-on-enter="" ng-model="search" ng-model-options="{debounce: 700}" type="search" class="prl" placeholder="search&hellip;">
+			<button ng-show="search.length && !hasExternalSelection()" mi-absorb-clicks="" class="btn6 absl top-right prs" ng-click="search = ''"><i class="icon-cancel"></i></button>
+			<button mi-absorb-clicks="" class="btn6-2 absl top-right prs animated-opacity {{hasExternalSelection() ? 'transparent-none' : 'transparent-full invisible'}}" ng-click="importExternalIcons(true, true)" mi-tooltip="{marginTop: 8, class: 'tooltip arrow-t', text: 'Import Selected Icons'}">
+			<i class="icon-import2"></i></button>
+		</label>
+		<div class="btnBar mrm unitRight m1-unit m0-mrn">
+		<button class="unit btn0" type="button" ng-click="history(-1)" ng-disabled="history.noUndo" mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t',
+		text: '{{::tooltips.undo}}'}">
+			<i class="icon-undo"></i>
+			<span class="visuallyhidden">Undo</span>
+		</button>
+		<button class="unit btn0" type="button" ng-click="history(1)" ng-disabled="history.noRedo" mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t',
+		text: '{{::tooltips.redo}}'}">
+			<i class="icon-redo"></i>
+			<span class="visuallyhidden">Redo</span>
+		</button>
+		</div>
+		</div>
+		<div class="m2-hidden">
+			<a class="unitRight fgc4 btn5 pvt phs" href="#/projects" mi-tooltip="{marginTop: 12, class: 'tooltip arrow-t', text: 'Manage Projects'}"><span class="unitRight talign-right width7 noOverflow2 fgc4">{{::project.metadata.name}}</span><i class="icon-stack pat"></i></a>
+			<!-- <input type="text" class="textbox0 fgc4 unitRight talign-right width7 noOverflow2" placeholder="Project Name" ng-model="project.metadata.name" /> -->
+		</div>
+		</div>
+		<div class="absl top-right mbn mtm mrm fgc5 m1-hidden lh0">
+			<button ng-if="!!expiration" ng-click="showWarning()" class="pan">
+				<i ng-if="cloudAccess" class="fs3 lh1 pts pls icon-{{isSyncing() ? 'sync fgc-warning' : 'icomoon fgc5'}}">
+					<i class="icon-warning fgc-{{expiration}} fs-down absl notification-left"></i>
+				</i>
+				<i ng-if="!cloudAccess" class="fgc4 icon-neutral lh1 fs3 pls pts" data-icon2="&#xe63f;">
+					<i class="icon-warning fgc-{{expiration}} fs-down absl notification-left"></i>
+				</i>
+			</button>
+			<button ng-if="cloudAccess && isSyncing() === 'failed'" ng-click="showWarning('Syncing failed. Retrying&hellip;<br />Please check your Internet connection.')" class="pan">
+				<i class="fs3 lh1 pts pls icon-sync fgc4">
+					<i class="icon-warning fgc-error fs-down absl notification-left"></i>
+				</i>
+			</button>
+			<i ng-if="cloudAccess && !expiration && isSyncing() !== 'failed'" class="fs3 lh1 icon-{{isSyncing() ? 'sync fgc-warning' : 'icomoon'}}"></i>
+			<a target="_blank" ng-if="!cloudAccess && !expiration" href="https://icomoon.io/#hi/r3f04" class="fgc4 transparent hoverE-icon"><i class="icon-neutral lh1 fs3" data-icon2="&#xe63f;"></i><span class="visuallyhidden">Hi!</span></a>
+			<!--<button ng-if="abTest === 'b' && !cloudAccess && !expiration" ng-click="showPromo()" class="pan hoverE-icon fgc4">
+				<i class="icon-neutral lh1 fs3" data-icon2="&#xe63f;"></i>
+			</button>-->
+		</div>
+	</div> <!-- End of tob bar -->
+	<div ng-show="tab === 'select'">
+	<div ng-if="project.iconSets.length === 0" class="miFileZone w-main phm mbl"><div mi-file-zone="" class="bshadow-ods rndt bgc10-transparent transparent" drag-class="transparent-none" type-regex=".svg|.json|text|plain" on-open="import(files, -1)">
+		<p class="mtn talign-center fgc11 pal">Drop Files to Import</p>
+	</div></div>
+	<div class="set w-main clearfix pam" ng-repeat="set in project.iconSets track by set.id" ng-class="{'mbs': set.invisible, 'mbl': !set.invisible}">
+		<div mi-file-zone="" class="miFileZone bgc10-transparent transparent rndt absl top-left layer-front size1of1 height1of1 bshadow-ods" drag-class="transparent-none" type-regex=".svg|.json|text|plain" on-open="import(files, $index)">
+			<!-- <p class="talign-center mtn">Drop Files to Import to This Set</p> -->
+		</div>	
+		<h1 class="setTitle rel fs3 mtn m1-fs5 m0-fs6 bshadow-ul4" id="setH{{set.id}}" ng-class="{'mbn': set.invisible, 'mbs': !set.invisible}">
+            <span class="noSelection noOverflow1 {{set.invisible ? 'fgc4' : ''}}">{{set.metadata.name}}</span>
+			<button mi-popup="focus" class="btn5 lh-def unitRight fs6-fixed pan mtl m1-mtn pls mls transparent">
+				<i class="icon-menu"></i>
+				<span class="visuallyhidden">Menu</span>
+			</button>
+			<ul class="menuList2 menuList3 hidden">
+				<li><button ng-click="showInfo($index)">Properties<i class="mlm icon-info"></i></button></li>
+				<li class="file">
+					<mi-file type-regex=".svg|.json|text|plain" focused="importToSetFocused" on-open="import(files, $index)"></mi-file>
+					<span class="menuItem iblk mts fgc3" ng-class="importToSetFocused ? 'focused' : ''">
+						Import to Set<i class="mlm icon-import"></i>
+					</span>
+				</li>
+				<li><button class="mlm" ng-click="moveSet(set, -1)">Move Up<i class="mlm icon-moveup"></i></button></li>
+				<li><button class="mlm" ng-click="moveSet(set, 1)">Move Down<i class="mlm icon-movedown"></i></button></li>
+				<li><button class="prs" ng-click="selectAllNone($index, true)">Select All</button>/<button ng-click="selectAllNone($index, false)">Deselect</button><i class="fgc3 mrm icon-all-none"></i></li>
+				<li><button ng-click="downloadSet(set)">Download JSON<i class="mlm icon-download"></i></button></li>
+				<li><button ng-click="copySelectionToSet($index)">Duplicate Selection Here<i class="mlm icon-copy-selection"></i></button></li>
+				<li><button ng-click="copySelectionToSet($index, true)">Move Selection Here<i class="mlm icon-move-selection"></i></button></li>
+				<li><button ng-click="showRearrange($index)">Rearrange Icons<i class="mlm icon-rearrange"></i></button></li>
+				<li><button ng-click="removeSet($index)">Remove Set<i class="mlm icon-cancel2"></i></button></li>
+			</ul>
+            <label class="unitRight lh1 fs6-fixed mtl m1-mtn mls unitRight cursor-pointer">
+            <svg class="switch-{{set.invisible ? 'off' : 'on'}}" width="2.5em" height="1.5em">
+                <path fill="#c2c2c2" stroke="#c2c2c2" stroke-width="2" d="M15.6,17c-0.8,0-1.9,0-2.9-0.1c-1-0.1-2-0.4-2.9-0.9c-1.8-1-2.9-2.9-2.9-5s1.1-3.9,2.9-5 c0.9-0.5,1.9-0.8,2.9-0.9C13.7,5,14.8,5,15.6,5l6.7,0c0.8,0,1.9,0,2.9,0.1c1,0.1,2,0.4,2.9,0.9c1.8,1,2.9,2.9,2.9,5s-1.1,3.9-2.9,5 c-0.9,0.5-1.9,0.8-2.9,0.9C24.3,17,23.2,17,22.4,17L15.6,17z"></path>
+                <circle class="animated-translate" fill="#fff" cx="25" cy="11" r="5"></circle>
+            </svg>
+			<input class="hidden" type="checkbox" ng-model="set.invisible">
+            </label>
+			<mi-presets mi-tooltip="{marginBottom: 12, text: 'Preview Size'}" class="prevSize mtl m1-mtn unitRight numberPresets fs6-fixed lh-def ff0" model="set.prevSize" def="set.metadata.grid || 32" min="6" max="128" presets="getMultiples(getGridSize(set) || [16, 20, 24, 32, 64, 128], 4)"></mi-presets>
+            <button ng-if="hasValidTheme(set)" ng-click="setSet($index); visiblePanels.colorThemes = true" class="clearfix m1-hidden lh-def unitRight fs6-fixed mtl mrs m1-mtn pan width1 ptt rndn">
+                <div class="unit height1" ng-repeat="c in set.colorThemes[set.colorThemeIdx]" style="width: {{100 / set.colorThemes[set.colorThemeIdx].length}}%; background: rgb({{c[0]}}, {{c[1]}}, {{c[2]}})"></div>
+            </button>
+		</h1>
+		<mi-style>
+			#set{{$index}} .icon {
+				width: {{2 * set.prevSize + 8}}px;
+				height: {{2 * set.prevSize + 8}}px
+			}
+			#set{{$index}} .icon-wide {
+				width: {{4 * set.prevSize + 28}}px;
+			}
+			#set{{$index}} .icon svg {
+				font-size: {{set.prevSize}}px;
+				margin-left: {{set.prevSize / 2 + 4}}px;
+				margin-top: {{set.prevSize / 2 + 4}}px;
+			}
+			/*#set{{$index}} .icon svg {
+				-{{vendorPrefix}}-transform: scale({{set.prevSize / normSize}}, {{set.prevSize / normSize}});
+				transform: scale({{set.prevSize / normSize}}, {{set.prevSize / normSize}});
+			}*/
+			#set{{$index}} {
+				display: {{set.invisible ? 'none': 'inherit'}};
+			}
+		</mi-style>
+		<div id="set{{$index}}" class="noTapHighlight clearfix {{set.prevSize < 32 ? 'prev-small': ''}}" ng-if="!set.invisible">
+		<mi-box-selector map="set.selection" mode="{{mode}}" on-apply="changeIcons(selection, $index, mode)">
+			<mi-box class="miBox" data-id="{{set.selection[$index].id}}" data-idx="{{$index}}" ng-repeat="icon in set.icons track by icon.id" ng-show="!search || searchResults[set.id][$index]">
+				<mi-icon icon="icon" height="{{set.height}}" prevsize="{{set.prevSize}}"></mi-icon>
+			</mi-box>
+		</mi-box-selector>
+		</div>
+	</div>
+	<!-- External Sets -->
+	<div ng-if="!!search && externalSets.length || externalSets.status" class="mbl">
+		<div class="bgc10">
+		  <h1 class="fs6 w-main fgc8 pvs ff2 phm mtn"><svg ng-if="externalSets.icon" class="mrs icon-spinner spinner"><use xlink:href="#icon-spinner"></use></svg>{{externalSets.status}}</h1>
+		</div>
+		<div ng-repeat="set in externalSets" class="w-main clearfix phm mtl">
+			<mi-style>
+			#xset{{$index}} img {
+				-{{vendorPrefix}}-transform: scale({{set.prevSize / set.imageSize}}, {{set.prevSize / set.imageSize}});
+				transform: scale({{set.prevSize / set.imageSize}}, {{set.prevSize / set.imageSize}});
+				margin-left: {{set.prevSize / 2 + 4}}px;
+				margin-top: {{set.prevSize / 2 + 4}}px;
+				height: {{set.imageSize}}px;
+			}
+			#xset{{$index}} .icon2 {
+				width: {{set.prevSize * 2 + 8}}px;
+				height: {{set.prevSize * 2 + 8}}px;
+			}
+			</mi-style>
+			<h1 class="setTitle rel fs3 mtn mbs m1-fs5 m0-fs6 bshadow-ul2">
+				<label>
+					<i class="btn5 fgc11 mrs icon-{{set.invisible ? 'right' : 'bottom'}}"></i>
+					<input class="hidden" type="checkbox" ng-model="set.invisible">
+					<span class="noOverflow3 fgc11">{{set.metadata.name}}</span>
+				</label>
+				<mi-presets class="prevSize mtl m1-mtn unitRight numberPresets fs6-fixed lh-def ff0" model="set.prevSize" def="set.grid || 32" min="6" max="set.premium ? set.imageSize : 128" presets="getMultiples(set.grid)"></mi-presets>
+			</h1>
+			<div id="xset{{$index}}" class="clearfix {{set.prevSize < 32 ? 'prev-small': ''}}" ng-if="!set.invisible">
+				<mi-box-selector map="set.selection" mode="{{set.premium ? '' : 'select'}}" on-apply="set.premium ? premiumAlert(set) : changeIcons(selection, $index, 'select', true)">
+					<mi-box class="miBox unit" data-idx="{{$index}}" data-id="{{set.selection[$index].id}}" ng-repeat="icon in set.icons">
+					<div class="icon2">
+					<img ng-src="{{set.dir}}{{icon}}.{{set.premium ? 'png' : 'svg'}}">
+					</div>
+					</mi-box>
+				</mi-box-selector>
+			</div>
+		</div>
+	</div>
+	<p class="w-main phm"><a href="#/select/library" class="iblk">
+	<i class="icon-library fs3 m0-hidden prt"></i>
+	<span class="fs5 m0-fs6">
+	Add Icons From Library&hellip;
+	</span>
+	</a></p>
+	<div class="pln bar-btm talign-center print-hidden">
+		<div class="w-main phm m0-phn">
+		<a href="#/select/image" class="btn9 iblk size1of3 sep-left {{getSelectionCount() === 0 ? 'transparent-more' : ''}}">
+			<i class="mrs icon-image"></i><span class="m1-hidden rel">Generate </span>SVG<span class="m3-unhidden">, &hellip;</span><span class="m3-hidden"> &amp; More</span></a><span class="btn9 selected size1of3 cursor-pointer rel">Selection <span class="m1-hidden">({{getSelectionCount()}})</span><span class="chevron-right absl top-right layer-front"></span><span class="chevron-left absl top-left layer-front"></span></span><a href="#/select/font" class="btn9 iblk size1of3 sep-right {{getSelectionCount() === 0 ? 'transparent-more' : ''}}">
+			<span class="m1-hidden">Generate </span>Font<i class="mls icon-font icon-low"></i>
+		</a>
+		</div>
+	</div>
+	</div> <!-- End of Select Tab -->
+	<!-- Font Controller and Font tab -->
+</div>
+<div ui-view=""></div>
+<!-- Edit Controller -->
+<div class="overlay" mi-file-over="" ng-controller="EditCtrl" ng-if="visiblePanels.edit === true" ng-click="visiblePanels.edit = false">
+	<div class="overlayWindow size1of2 m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+	<div class="absl top-left mlxl mts" ng-if="pref.showGrid">
+		<span class="ff0 fgc3">{{fixed((icon.width || normSize) / ((icon.height || normSize) / icon.grid))}}&times;{{fixed(icon.grid)}}</span>
+	</div>
+	<div class="absl top-right">
+		<button tabindex="1" class="pan pat btn5 hoverE-icon unitRight" ng-click="visiblePanels.edit = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+		<div class="unit mts">
+		<label class="btn5">
+			<i class="{{pref.showGrid ? 'icon-checked' : 'icon-unchecked'}}"></i>
+			<input class="hidden" type="checkbox" ng-model="pref.showGrid">
+			Grid
+		</label>
+		<mi-presets class="numberPresets" model="icon.grid" min="0" max="128" presets="[16, 20, 24, 32]"></mi-presets>
+		</div>
+	</div>
+	<div ng-click="selectPath(NaN)" class="bgc7 rndt svgContainer noSelection">
+		<div mi-file-zone="" class="miFileZone bgc10-transparent transparent rndt absl top-left layer-front size1of1 height1of1 bshadow-ods" drag-class="transparent-none" type-regex=".svg" on-open="replace(files)">
+		</div>
+		<svg id="edit-svg" style="width: {{getWidth(50)}}; height: 60%" mi-view-box="0 0 {{icon.width || normSize}} {{normSize}}">
+		<rect fill="white" x="0" y="0" mi-width="{{icon.width || normSize}}" mi-height="{{normSize}}"></rect>
+		<g>
+            <path class="cursor-pointer {{!(pathIdx + 1) || icon.paths.length === 1 || pathIdx === $index ? '' : 'transparent-most'}}" ng-repeat="path in icon.paths track by tempIds[$index]" mi-d="{{path}}" mi-fill="{{icon.attrs && (icon.attrs[$index].fill || 'inherit')}}" mi-stroke="{{icon.attrs && (icon.attrs[$index].stroke || 'inherit')}}" mi-stroke-width="{{icon.attrs && (icon.attrs[$index].strokeWidth || 'inherit')}}" mi-stroke-linejoin="{{icon.attrs && (icon.attrs[$index].strokeLinejoin || 'inherit')}}" mi-stroke-linecap="{{icon.attrs && (icon.attrs[$index].strokeLinecap || 'inherit')}}" mi-stroke-miterlimit="{{icon.attrs && (icon.attrs[$index].strokeMiterlimit || 'inherit')}}" mi-opacity="{{icon.attrs && (icon.attrs[$index].opacity || '1')}}" ng-click="selectPath($index)" mi-absorb-clicks="">
+			</path>
+		</g>
+        <g ng-show="pref.showGrid" class="edit-grid">
+            <g class="hLines"><line ng-repeat="h in grid.hLines" x1="0" x2="100%" mi-y1="{{h.y}}" mi-y2="{{h.y}}"></line></g>
+            <g class="vLines"><line ng-repeat="v in grid.vLines" y1="0" y2="100%" mi-x1="{{v.x}}" mi-x2="{{v.x}}"></line></g>
+        </g>
+		</svg>
+		<button class="prev hoverE-icon plt" ng-click="prev()" ng-hide="noPrev" tabindex="2">
+			<i class="icon-prev fs3 mvn" data-icon2="&#xe61d;"></i>
+			<span class="visuallyhidden">Previous</span>
+		</button>
+		<button class="next hoverE-icon prt" ng-click="next()" ng-hide="noNext" tabindex="4">
+			<i class="icon-next fs3 mvn" data-icon2="&#xe61c;"></i>
+			<span class="visuallyhidden">Next</span>
+		</button>
+	</div>
+    <div class="clearfix mtl">
+        <div class="unit btnBar mrs">
+        <label mi-tooltip="{marginBottom: 4, text: 'Rotate/Mirror'}" class="{{tmp.editPanelTool === 'rotateMirror' ? 'btn0-embossed' : 'btn0'}} unit" ng-class="{focused: rotateMirrorFocused}">
+			<i class="icon-rotate-flip"></i>
+            <input name="editTool" class="visuallyhidden" type="radio" ng-model="tmp.editPanelTool" value="rotateMirror" ng-focus="rotateMirrorFocused = true" ng-blur="rotateMirrorFocused = false">
+		</label>
+        <label mi-tooltip="{marginBottom: 4, text: 'Move'}" class="{{tmp.editPanelTool === 'move' ? 'btn0-embossed' : 'btn0'}} unit" ng-class="{focused: moveFocused}">
+			<i class="icon-move"></i>
+            <input name="editTool" class="visuallyhidden" type="radio" ng-model="tmp.editPanelTool" value="move" ng-focus="moveFocused = true" ng-blur="moveFocused = false">
+		</label>
+        <label mi-tooltip="{marginBottom: 4, text: 'Scale'}" class="{{tmp.editPanelTool === 'scale' ? 'btn0-embossed' : 'btn0'}} unit" ng-class="{focused: scaleFocused}">
+			<i class="icon-scale"></i>
+            <input name="editTool" class="visuallyhidden" type="radio" ng-model="tmp.editPanelTool" value="scale" ng-focus="scaleFocused = true" ng-blur="scaleFocused = false">
+		</label>
+        <label mi-tooltip="{marginBottom: 4, text: 'Canvas/Alignment'}" class="{{tmp.editPanelTool === 'canvas' ? 'btn0-embossed' : 'btn0'}} unit" ng-class="{focused: canvasSizeFocused}">
+			<i class="icon-canvas"></i>
+            <input name="editTool" class="visuallyhidden" type="radio" ng-model="tmp.editPanelTool" value="canvas" ng-focus="canvasSizeFocused = true" ng-blur="canvasSizeFocused = false">
+		</label>
+        <label ng-if="showColorTools" mi-tooltip="{marginBottom: 4, text: 'Color'}" class="{{tmp.editPanelTool === 'color' ? 'btn0-embossed' : 'btn0'}} unit" ng-class="{focused: colorFocused}">
+			<i class="icon-droplet"></i>
+            <input name="editTool" class="visuallyhidden" type="radio" ng-model="tmp.editPanelTool" value="color" ng-focus="colorFocused = true" ng-blur="colorFocused = false">
+		</label>
+        </div>
+    </div>
+	<div class="clearfix mtm">
+		<div class="btnBar unit mrs mbm" ng-show="tmp.editPanelTool === 'rotateMirror'">
+		<button ng-click="ccw()" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Rotate 90&deg; CCW'}">
+			<i class="icon-ccw"></i>
+			<span class="visuallyhidden">Rotate 90 &deg; CCW</span>
+		</button>
+		<button ng-click="cw()" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Rotate 90&deg; CW'}">
+			<i class="icon-cw"></i>
+			<span class="visuallyhidden">Rotate 90 &deg; CW</span>
+		</button>
+        <button ng-click="flipHorizontal()" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Flip Horizontally'}">
+			<i class="icon-flip-h"></i>
+			<span class="visuallyhidden">Flip Horizontally</span>
+		</button>
+		<button ng-click="flipVertical()" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Flip Vertically'}">
+			<i class="icon-flip-v"></i>
+			<span class="visuallyhidden">Flip Vertically</span>
+		</button>
+		</div>
+		<div class="btnBar unit mbm mrs" ng-show="tmp.editPanelTool === 'scale'">
+		<button ng-click="scale({dir: -1})" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Scale Down'}">
+			<i class="icon-scale-down"></i>
+			<span class="visuallyhidden">Scale Down</span>
+		</button>
+        <button ng-click="scale({dir: 1})" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Scale Up'}">
+			<i class="icon-scale-up"></i>
+			<span class="visuallyhidden">Scale Up</span>
+		</button>
+        <button ng-click="fitToCanvas()" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Fit to Canvas'}">
+			<i class="icon-fit-to-canvas"></i>
+			<span class="visuallyhidden">Fit to Canvas</span>
+		</button>
+		</div>
+		<div class="unit mrs" ng-show="tmp.editPanelTool === 'canvas'">
+        <div class="btnBar unit mrs mbm">
+		<button ng-click="increaseWidth()" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Increase Canvas Width'}">
+			<i class="icon-icw"></i>
+			<span class="visuallyhidden">Increase Canvas Width</span>
+		</button>
+		<button ng-click="makeSquare()" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Square Canvas'}">
+			<i class="icon-make-square"></i>
+			<span class="visuallyhidden">Square Canvas</span>
+		</button>
+		<button ng-click="decreaseWidth()" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Decrease Canvas Width'}">
+			<i class="icon-dcw"></i>
+			<span class="visuallyhidden">Decrease Canvas Width</span>
+		</button>
+        </div>
+        <div class="unit btnBar mbm">
+		<button ng-click="align('left')" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Align to Left'}">
+			<i class="icon-align-left"></i>
+			<span class="visuallyhidden">Align to Left</span>
+		</button>
+		<button ng-click="align('right')" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Align to Right'}">
+			<i class="icon-align-right"></i>
+			<span class="visuallyhidden">Align to Right</span>
+		</button>
+		<button ng-click="align('top')" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Align to Top'}">
+			<i class="icon-align-top"></i>
+			<span class="visuallyhidden">Align to Top</span>
+		</button>
+		<button ng-click="align('bottom')" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Align to Bottom'}">
+			<i class="icon-align-bottom"></i>
+			<span class="visuallyhidden">Align to Bottom</span>
+		</button>
+		<button ng-click="align('center')" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Align to Center'}">
+			<i class="icon-align-center"></i>
+			<span class="visuallyhidden">Align to Center</span>
+		</button>
+		</div>
+        </div>
+		<div class="btnBar unit mrs mbm" ng-show="tmp.editPanelTool === 'move'">
+		<button ng-click="translate(-1, 0)" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Move Left'}">
+			<i class="icon-move-left"></i>
+			<span class="visuallyhidden">Move Left</span>
+		</button>
+		<button ng-click="translate(1, 0)" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Move Right'}">
+			<i class="icon-move-right"></i>
+			<span class="visuallyhidden">Move Right</span>
+		</button>
+		<button ng-click="translate(0, -1)" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Move Up'}">
+			<i class="icon-move-up"></i>
+			<span class="visuallyhidden">Move Up</span>
+		</button>
+		<button ng-click="translate(0, 1)" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Move Down'}">
+			<i class="icon-move-down"></i>
+			<span class="visuallyhidden">Move Down</span>
+		</button>
+		</div>
+		<button ng-show="pathIdx >= 0" ng-click="deletePath(pathIdx)" class="btn0 width4 unit mrs mbm" mi-tooltip="{marginBottom: 4, text: 'Delete Path'}">
+			<i class="icon-delete"></i>
+			<span class="visuallyhidden">Delete Path</span>
+		</button>
+        <button ng-click="removeColors()" class="btn0 unit mrs mbm" ng-if="showColorTools && tmp.editPanelTool === 'color'" mi-tooltip="{marginBottom: 4, text: 'Remove Colors'}">
+			<i class="icon-droplet-cross"></i>
+			<span class="visuallyhidden">Remove Colors</span>
+        </button>
+        <div class="btnBar unit mbm" ng-show="icon.paths.length > 1 && pathIdx >= 0">
+		<button ng-click="moveLayer(1)" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Bring Forward'}">
+			<i class="icon-bring-forward"></i>
+			<span class="visuallyhidden">Bring Forward</span>
+		</button>
+		<button ng-click="moveLayer(-1)" class="btn0 width4" mi-tooltip="{marginBottom: 4, text: 'Send Backward'}">
+			<i class="icon-send-backward"></i>
+			<span class="visuallyhidden">Send Backward</span>
+		</button>
+        </div>
+    </div>
+	<div class="clearfix mbm pts" ng-if="icon.attrs[pathIdx].fill !== 'none' && currentTheme && pathIdx >= 0 && tmp.editPanelTool === 'color'">
+		<button ng-repeat="c in currentTheme" class="unit rndn pvm phn size1of{{currentTheme.length}}" ng-style="{'background-color': c.str}" ng-class="icon.attrs && icon.attrs[pathIdx].fill === c.str ? 'layer-front bshadow-odl2' : ''" ng-click="updateColor('fill', $index)"></button>
+	</div>
+	<div class="clearfix mbm pts" ng-if="icon.attrs[pathIdx].strokeWidth && currentTheme && pathIdx >= 0 && tmp.editPanelTool === 'color'">
+		<button ng-repeat="c in currentTheme" class="unit rndn pvm phn size1of{{currentTheme.length}}" ng-style="{'background-color': c.str}" ng-class="icon.attrs && icon.attrs[pathIdx].stroke === c.str ? 'layer-front bshadow-odl2' : ''" ng-click="updateColor('stroke', $index)"></button>
+	</div>
+	<div class="clearfix">
+		<label>
+			<div class="mbs">Tags <span class="m0-hidden fs7">(used for search)</span></div>
+			<input ng-model="tags" mi-tags="" mi-blur-on-enter="" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box mbm" type="text" placeholder="Comma-separated Tags">
+		</label>
+		<label>
+			<div class="mbs">Names <span class="m0-hidden fs7">(used for class names, IDs, etc.)</span></div>
+			<input ng-model="name.name" mi-tags="" mi-blur-on-enter="" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box" type="text" placeholder="Comma-Separated Names">
+		</label>
+	</div>
+	<div class="clearfix" ng-if="edit.set.metadata.kerning">
+		<label>
+			<div class="mvs">Kerning</div>
+			<input ng-model="icon.kerning" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box mbm" type="text" placeholder="JSON, E.g.: {&#34;v w y&#34;: -1}">
+		</label>
+	</div>
+	<div class="clearfix mtl">
+		<button class="unit btn0 mrs m0-size1of1 m0-mbs" ng-click="downloadIcon(icon)">Download (SVG)</button>
+		<div class="file unit m0-size1of1 btn0 rndt m0-mbs" ng-class="replaceFocused ? 'focused' : ''">
+			<mi-file type-regex=".svg" on-open="replace(files)" focused="replaceFocused"></mi-file>
+			<div class="size1of1">
+				<span class="m0-">Replace</span>
+			</div>
+		</div>
+		<button class="unitRight btn0 m0-size1of1" ng-click="makeCopy(icon)">Duplicate</button>
+	</div>
+</div>
+</div>
+
+<div ng-if="visiblePanels.info === true" class="overlay" ng-click="visiblePanels.info = false">
+	<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+	<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.info = false">
+		<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+		<span class="visuallyhidden">Close</span>
+	</button>
+	<h1 class="fs4 mvn bshadow-ul2">{{metadata.name}} <span class="fs-down fgc3" ng-show="iconsCount > 1">({{iconsCount}}&nbsp;icons)</span></h1>
+	<dl class="mtm clearfix">
+		<dt class="transparent">URL</dt>
+		<dd class="mln pbm mvm bshadow-ul2"><mi-link href="{{metadata.url}}">{{metadata.url || 'Unknown'}}</mi-link></dd>
+		<dt class="transparent">Designer</dt>
+		<dd class="mln pbm mvm bshadow-ul2">
+			<mi-link href="{{metadata.designerURL}}">{{metadata.designer || 'Unknown'}}</mi-link>
+		</dd>
+		<dt class="transparent">License</dt>
+		<dd class="mln mtm">
+			<mi-link href="{{metadata.licenseURL}}">{{metadata.license || 'Unknown'}}</mi-link>
+		</dd>
+	</dl>
+	<fieldset class="clearfix">
+		<button ng-click="editMetadata()" class="btn0 unit size1of1"><i class="icon-edit mrs"></i>Edit Metadata</button>
+	</fieldset>
+	<h2 class="fs5 mlnm mtl" ng-class="tmp.hideGridPadding ? 'mbn' : 'mbm'">
+		<label class="hoverE0">
+			<i class="btn5 icon-{{tmp.hideGridPadding ? 'right' : 'bottom'}}"></i>
+			<input class="visuallyhidden" type="checkbox" ng-model="tmp.hideGridPadding">
+			Grid Size: {{getGridSize().toString() || 'Unknown'}}
+		</label>
+	</h2>
+	<fieldset ng-show="!tmp.hideGridPadding">
+		<div class="clearfix">
+		<button class="btn0 unit size12of25 m0-size1of1 mbs" ng-click="showGridReset()">Reset Grid Size</button>
+		<button ng-disabled="getGridSize().length !== 1" class="btn0 unitRight size12of25 m0-size1of1" ng-click="showPaddings()">Add Padding</button>
+		</div>
+		<p class="mts mbn" ng-show="getGridSize().length !== 1"><i class="icon-info mrs"></i>Reset the grid size in order to add paddings.</p>
+	</fieldset>
+	<div>
+	<h2 class="fs5 mlnm mtl" ng-class="hideColorTheme ? 'mbn' : 'mbm'">
+		<label class="hoverE0">
+			<i class="btn5 icon-{{hideColorTheme ? 'right' : 'bottom'}}"></i>
+			<input class="visuallyhidden" type="checkbox" ng-model="hideColorTheme">
+			Color Theme
+		</label>
+	</h2>
+	<fieldset ng-show="!hideColorTheme" class="lh0">
+		<button ng-if="colorTheme && colorTheme.length > 1 && colorTheme.length < 16" ng-click="visiblePanels.info = false; visiblePanels.colorThemes = true" class="btn5 clearfix size1of1 pan valign-top">
+		<div ng-repeat="c in colorTheme" ng-style="{'background-color': 'rgba({{c[0]}},{{c[1]}},{{c[2]}},{{c[3]}})'}" class="pvm unit size1of{{colorTheme.length}}"></div>
+		</button>
+        <div ng-if="!colorTheme || colorTheme.length < 2 || colorTheme.length > 15">
+            <p class="mvn">No color theme was found.</p>
+        </div>
+        <button ng-click="removeAllColors()" class="btn0 unit size1of1 mtl">Remove All Colors</button>
+	</fieldset>
+	</div>
+	</div> <!-- End of Info Panel -->
+</div>
+
+<div ng-if="visiblePanels.rearrange === true" class="overlay" ng-click="visiblePanels.rearrange = false">
+	<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+	<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.rearrange = false">
+		<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+		<span class="visuallyhidden">Close</span>
+	</button>
+	<form class="clearfix">
+	<label class="unit size1of1 btn5 fgc3 mrm mbm" ng-class="{'fgc10': reverseOrderFocused}">
+		<i class="icon-radio-{{!tmp.orderBy || tmp.orderBy === 'reverse' ? 'checked' : 'unchecked'}}"></i>
+		<input class="visuallyhidden" name="orderBy" value="reverse" type="radio" ng-model="tmp.orderBy" ng-focus="reverseOrderFocused = true" ng-blur="reverseOrderFocused = false">
+		Reverse current order
+	</label>
+	<label class="unit size1of1 btn5 fgc3 mrm mbm" ng-class="{'fgc10': nameOrderFocused}">
+		<i class="icon-radio-{{tmp.orderBy === 'name' ? 'checked' : 'unchecked'}}"></i>
+		<input class="visuallyhidden" name="orderBy" value="name" type="radio" ng-model="tmp.orderBy" ng-focus="nameOrderFocused = true" ng-blur="nameOrderFocused = false">
+		Order by name (or&nbsp;first&nbsp;tag)
+	</label>
+	<label class="unit size1of1 btn5 fgc3 mrm mbm" ng-class="{'fgc10': codeOrderFocused}">
+		<i class="icon-radio-{{tmp.orderBy === 'code' ? 'checked' : 'unchecked'}}"></i>
+		<input class="visuallyhidden" name="orderBy" value="code" type="radio" ng-model="tmp.orderBy" ng-focus="codeOrderFocused = true" ng-blur="codeOrderFocused = false">
+		Order by code point (set&nbsp;in&nbsp;font&nbsp;tab)
+	</label>
+    <label class="unit size1of1 btn5 fgc3 mtm" ng-class="arrangeSelectionFocused ? 'fgc10' : ''">
+        <i class="{{tmp.arrangeSelection ? 'icon-checked' : 'icon-unchecked'}}"></i>
+        <input class="visuallyhidden" type="checkbox" ng-model="tmp.arrangeSelection" ng-focus="arrangeSelectionFocused = true" ng-blur="arrangeSelectionFocused = false">
+        Only affect selected icons
+    </label>
+	<button class="unit btn0 mtl size1of1" ng-click="rearrange()" mi-focus-when="{{visiblePanels.rearrange}}">Rearrange</button>
+	</form>
+	</div>
+</div>
+
+<div ng-if="visiblePanels.colorThemes === true" class="overlay" mi-file-over="" ng-click="visiblePanels.colorThemes = false">
+	<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+	<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.colorThemes = false">
+		<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+		<span class="visuallyhidden">Close</span>
+	</button>
+	<h2 class="fs5 mlnm mtn" ng-class="!hideColorThemes ? 'mbl' : 'mbn'" ng-show="set.colorThemes.length > 0">
+		<label class="hoverE0">
+			<i class="btn5 icon-{{!hideColorThemes ? 'bottom' : 'right'}}"></i>
+			<input class="visuallyhidden" type="checkbox" ng-model="hideColorThemes">
+			Color Themes <span><span class="fs6-fixed fgc4">&nbsp;for&nbsp;</span> {{metadata.name}}</span>
+		</label>
+	</h2>
+	<fieldset ng-if="set.colorThemes.length > 0 && !hideColorThemes">
+	<div ng-repeat="colorTheme in set.colorThemes" class="rel">
+		<div class="blk clearfix size1of1 pan" ng-class="{'mtl': $index !== 0}">
+			<i class="unit absl mtm icon-radio-{{set.colorThemeIdx == $index ? 'checked' : 'unchecked'}}"></i>
+			<input id="theme-{{$index}}" class="visuallyhidden" type="radio" name="colorTheme" value="{{$index}}" ng-model="colorThemeIdx.value" ng-change="selectColorTheme($index)">
+			<div class="unitRight">
+				<button ng-click="downloadColorTheme($index)" class="btn5 pat mls">
+				<i class="icon-download"></i></button>
+				<button ng-click="removeColorTheme($index)" class="btn5 pat mls">
+				<i class="icon-delete"></i></button>
+			</div>
+			<label for="theme-{{$index}}" class="lastUnit clearfix size1of1 pll rel">
+				<div ng-repeat="c in colorTheme" ng-style="{'background-color': 'rgba({{c[0]}},{{c[1]}},{{c[2]}},{{c[3]}})'}" class="pvm unit size1of{{colorTheme.length}}"></div>
+			</label>
+		</div>
+	</div>
+	</fieldset>
+	<h2 class="fs5 mlnm mtl" ng-class="showCurrentTheme ? 'mbl' : 'mbn'" ng-show="set.colorThemes.length > 0">
+		<label class="hoverE0">
+			<i class="btn5 icon-{{showCurrentTheme ? 'bottom' : 'right'}}"></i>
+			<input class="visuallyhidden" type="checkbox" ng-model="showCurrentTheme">
+			Edit Current Theme
+		</label>
+	</h2>
+	<fieldset class="mtl" ng-if="showCurrentTheme && set.colorThemes.length > 0">
+		<div class="clearfix">
+			<button tabindex="-1" id="currentNum{{$index}}" ng-repeat="c in currentTheme" class="unit rndn pvm phn size1of{{currentTheme.length}}" ng-style="{'background-color': getColorString(c.hex)}" ng-click="currentTheme.idx = $index" ng-class="currentTheme.idx === $index ? 'layer-front bshadow-odl2' : ''"></button>
+		</div>
+		<mi-color-picker ng-repeat="c in currentTheme" color="c.hex" result-id="currentNum{{$index}}" ng-show="$index === currentTheme.idx"></mi-color-picker>
+		<button ng-click="editColorTheme(currentTheme)" class="btn0 mtm unitRight size1of1"><i class="icon-sync mrs"></i>Update Theme</button>
+	</fieldset>
+	<h2 class="fs5 mlnm mtn" ng-class="{'mbl': showNewTheme, 'mbn': !showNewTheme, 'mtl': set.colorThemes.length > 0}">
+		<label class="hoverE0">
+			<i class="btn5 icon-{{showNewTheme ? 'bottom' : 'right'}}"></i>
+			<input class="visuallyhidden" type="checkbox" ng-model="showNewTheme">
+			Add Color Theme
+		</label>
+		<div class="unitRight file" ng-show="showNewTheme">
+			<mi-file array-buffer-if="ase" on-open="importColorTheme(files)"></mi-file>
+			<span class="iblk mts btn5 fs6-fixed">
+				<i class="mlm icon-import"></i> Import<span class="m3-hidden"> (ASE, SVG, JSON)</span>
+			</span>
+		</div>
+	</h2>
+	<fieldset ng-show="showNewTheme" class="mtl">
+		<div mi-file-zone="" class="miFileZone bgc10-transparent transparent rndt layer-front size1of1 mbl bshadow-ods" drag-class="transparent-none" array-buffer-if="ase" on-open="importColorTheme(files)">
+			<p class="talign-center pvl mtn fgc11">Drop ASE or SVG files</p>
+		</div>
+		<div class="rel clearfix">
+			<button tabindex="-1" id="newNum{{$index}}" ng-repeat="c in newColorTheme" class="unit rndn pvm phn size1of{{newColorTheme.length}}" ng-style="{'background-color': getColorString(c.hex)}" ng-click="newColorTheme.idx = $index" ng-class="newColorTheme.idx === $index ? 'layer-front bshadow-odl2' : ''"></button>
+            <div class="absl m0-rel top-right mtl">
+                <button ng-click="duplicateColor()" class="btn5 phn mrm mtl"><i class="icon-duplicate mrs"></i>Duplicate</button>
+                <button ng-click="removeColor()" class="btn5 phn mtl"><i class="icon-cancel2 mrs"></i>Remove</button>
+            </div>
+		</div>
+		<mi-color-picker ng-repeat="c in newColorTheme" color="c.hex" result-id="newNum{{$index}}" ng-show="$index === newColorTheme.idx"></mi-color-picker>
+		<button ng-click="addColorTheme(newColorTheme, set, true)" class="btn0 mtm unitRight size1of1"><i class="icon-plus mrs"></i>Add Theme</button>
+	</fieldset>
+	</div>
+</div>
+
+<div ng-if="visiblePanels.gridReset === true" class="overlay" ng-click="visiblePanels.gridReset = false">
+	<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+	<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.gridReset = false">
+		<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+		<span class="visuallyhidden">Close</span>
+	</button>
+	<form class="clearfix">
+	<label class="unit m0-size1of1" mi-focus-when="{{visiblePanels.gridReset}}">
+	New Grid Size:
+	<mi-number min="0" def="16" max="1024" model="tmp.newGrid" class="iblk border-box m0-unitRight mls miNumber talign-center width3"></mi-number>
+	</label>
+	<button type="submit" class="btn0 size2of5 unitRight m0-size1of1 m0-mtm" ng-click="resetGrids(tmp.newGrid)">Reset</button>
+	</form>
+	</div>
+</div>
+<div ng-if="visiblePanels.paddings === true" class="overlay" ng-click="visiblePanels.paddings = false">
+	<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+	<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.paddings = false">
+		<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+		<span class="visuallyhidden">Close</span>
+	</button>
+	<form class="clearfix">
+	<label class="unit m0-size1of1" mi-focus-when="{{visiblePanels.paddings}}">
+	Padding:
+	<mi-number min="tmp.minPadding" max="tmp.maxPadding" model="tmp.padding" class="iblk border-box m0-unitRight mls miNumber talign-center width3"></mi-number>
+	</label>
+	<button type="submit" class="btn0 size2of5 unitRight m0-size1of1 m0-mtm" ng-click="addPadding(tmp.padding)">Add Padding</button>
+	</form>
+	<p class="mbn">New grid size after adding this padding: {{round(tmp.padding + tmp.gridSize)}}</p>
+	</div>
+</div>
+<div ng-if="visiblePanels.metadata === true" class="overlay" ng-click="visiblePanels.metadata = false">
+	<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+	<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.metadata = false">
+		<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+		<span class="visuallyhidden">Close</span>
+	</button>
+	<div class="m0-fs7">
+		<fieldset>
+			<label class="unit size1of1 mbm">
+				<span class="blk">Name</span>
+				<input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="metadata.name" class="size1of1 border-box">
+			</label>
+			<label class="unit size1of1 mbm">
+				<span class="blk">URL</span>
+				<input type="url" ng-model-options="{updateOn: 'blur'}" ng-model="metadata.url" class="size1of1 border-box">
+			</label>
+			<label class="unit size1of1 mbm">
+				<span class="blk">Designer</span>
+				<input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="metadata.designer" class="size1of1 border-box">
+			</label>
+			<label class="unit size1of1 mbm">
+				<span class="blk">Designer's URL</span>
+				<input type="url" ng-model-options="{updateOn: 'blur'}" ng-model="metadata.designerURL" class="size1of1 border-box">
+			</label>
+			<label class="unit size1of1 mbm">
+				<span class="blk">License</span>
+				<input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="metadata.license" class="size1of1 border-box">
+			</label>
+			<label class="unit size1of1">
+				<span class="blk">License URL</span>
+				<input type="url" ng-model-options="{updateOn: 'blur'}" ng-model="metadata.licenseURL" class="size1of1 border-box">
+			</label>
+		</fieldset>
+	</div>
+	</div> <!-- End of Metadata Panel -->
+</div>

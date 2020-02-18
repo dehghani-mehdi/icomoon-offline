@@ -1,0 +1,426 @@
+<div ng-show="tab === 'select.font'">
+	<div ng-if="visiblePanels.fontPref === true" class="overlay" ng-click="visiblePanels.fontPref = false">
+		<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+		<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.fontPref = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+		<div class="m0-fs7">
+			<fieldset class="clearfix">
+				<label class="unit size1of1 mbm">
+					<span class="blk">Font Name</span>
+					<input maxlength="31" mi-focus-when="{{visiblePanels.fontPref}}" type="text" ng-model="fontPref.metadata.fontFamily" placeholder="icomoon" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box">
+				</label>
+				<label class="unit size3of7 mbm">
+					<span class="blk">Class Prefix</span>
+					<input type="text" ng-model="fontPref.prefix" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box">
+				</label>
+				<label class="unitRight size3of7 mbm">
+					<span class="blk">Class Suffix</span>
+					<input type="text" ng-model="fontPref.postfix" ng-model-options="{updateOn: 'blur'}" class="size1of1 border-box">
+				</label>
+				<label class="unit size1of1 btn5 fgc3 mtm" ng-class="noie8Focused ? 'fgc10' : ''">
+					<i class="{{!fontPref.noie8 ? 'icon-checked' : 'icon-unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="fontPref.noie8" ng-focus="noie8Focused = true" ng-blur="noie8Focused = false">
+					Support IE 8
+				</label>
+				<label ng-show="!fontPref.noie8" class="unit size1of1 btn5 fgc3 mtm" ng-class="ie7Focused ? 'fgc10' : ''">
+					<i class="{{fontPref.ie7 ? 'icon-checked' : 'icon-unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="fontPref.ie7" ng-focus="ie7Focused = true" ng-blur="ie7Focused = false">
+					Support IE 7 &amp; IE 6
+				</label>
+				<label class="unit size1of1 btn5 fgc3 mtm" ng-class="imdFocused ? 'fgc10' : ''">
+					<i class="{{fontPref.includeMetadata ? 'icon-checked' : 'icon-unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="fontPref.includeMetadata" ng-focus="imdFocused = true" ng-blur="imdFocused = false">
+					Include metadata in fonts
+				</label>
+				<label ng-click="showPromo({r3f: '05', hide: 'fontPref'})" class="unit size1of1 btn5 fgc3 mtm" ng-class="{'fgc10': embedFocused, 'fgc4': !cloudAccess}">
+					<i class="{{fontPref.embed ? 'icon-checked' : 'icon-unchecked'}}"></i>
+					<input ng-disabled="!cloudAccess" class="visuallyhidden" type="checkbox" ng-model="fontPref.embed" ng-focus="embedFocused = true" ng-blur="embedFocused = false">
+					Encode &amp; embed font in CSS&nbsp;
+					<span class="fgc3" ng-if="!cloudAccess">(premium)</span>
+				</label>
+				<label class="unit size1of1 btn5 fgc3 mtm animated-margin" ng-class="{mbm: fontPref.cssVars, 'fgc10': classSelectorFocused}">
+					<i class="{{fontPref.cssVars ? 'icon-checked' : 'icon-unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="fontPref.cssVars" ng-focus="cssVarsFocused = true" ng-blur="cssVarsFocused = false">
+                    <span ng-show="!fontPref.cssVars">Generate Sass, Less or Stylus variables</span>
+                    <span ng-show="fontPref.cssVars">Generate preprocessor variables for:</span>
+				</label>
+				<label class="unit btn5 fgc3 mrm" ng-show="fontPref.cssVars" ng-class="{'fgc10': sassFocused}">
+					<i class="icon-radio-{{!fontPref.cssVarsFormat || fontPref.cssVarsFormat === 'scss' ? 'checked' : 'unchecked'}}"></i>
+					<input class="visuallyhidden" name="cssVarsFormat" value="scss" type="radio" ng-model="fontPref.cssVarsFormat" ng-focus="sassFocused = true" ng-blur="sassFocused = false">
+					Sass
+				</label>
+				<label class="unit btn5 fgc3 mrm" ng-show="fontPref.cssVars" ng-class="{'fgc10': stylusFocused}">
+					<i class="icon-radio-{{fontPref.cssVarsFormat === 'styl' ? 'checked' : 'unchecked'}}"></i>
+					<input class="visuallyhidden" name="cssVarsFormat" value="styl" type="radio" ng-model="fontPref.cssVarsFormat" ng-focus="stylusFocused = true" ng-blur="stylusFocused = false">
+					Stylus
+				</label>
+				<label class="unit btn5 fgc3 mrm" ng-show="fontPref.cssVars" ng-class="{'fgc10': lessFocused}">
+					<i class="icon-radio-{{fontPref.cssVarsFormat === 'less' ? 'checked' : 'unchecked'}}"></i>
+					<input class="visuallyhidden" name="cssVarsFormat" value="less" type="radio" ng-model="fontPref.cssVarsFormat" ng-focus="lessFocused = true" ng-blur="lessFocused = false">
+					Less
+				</label>
+			</fieldset>
+			<h1 class="fs5 mlnm" ng-class="{fgc10: showSelectorFocused, mbn: !fontPref.showSelector}">
+				<label class="hoverE0">
+					<i class="btn5 icon-{{fontPref.showSelector ? 'bottom' : 'right'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="fontPref.showSelector" ng-focus="showSelectorFocused = true" ng-blur="showSelectorFocused = false">
+					CSS Selector
+				</label>
+			</h1>
+			<fieldset ng-show="fontPref.showSelector" class="clearfix">
+				<label class="unit size1of1 btn5 fgc3 mbm" ng-class="{'fgc10': iSelectorFocused}">
+					<i class="icon-radio-{{fontPref.selector === 'i' ? 'checked' : 'unchecked'}}"></i>
+					<input class="visuallyhidden" name="cssSelector" value="i" type="radio" ng-model="fontPref.selector" ng-focus="iSelectorFocused = true" ng-blur="iSelectorFocused = false">
+					Use i (for selecting &lt;i&gt;)
+				</label>
+				<label class="unit size1of1 btn5 fgc3 mbm" ng-class="{'fgc10': attrSelectorFocused}">
+					<i class="icon-radio-{{!fontPref.selector ? 'checked' : 'unchecked'}}"></i>
+					<input class="visuallyhidden" name="cssSelector" value="" type="radio" ng-model="fontPref.selector" ng-focus="attrSelectorFocused = true" ng-blur="attrSelectorFocused = false">
+					Use attribute selectors
+				</label>
+				<label class="unit size1of1 btn5 fgc3 animated-margin" ng-class="{mbm: fontPref.selector === 'class', 'fgc10': classSelectorFocused}">
+					<i class="icon-radio-{{fontPref.selector === 'class' ? 'checked' : 'unchecked'}}"></i>
+					<input class="visuallyhidden" name="cssSelector" value="class" type="radio" ng-model="fontPref.selector" ng-focus="classSelectorFocused = true" ng-blur="classSelectorFocused = false">
+					Use a class
+				</label>
+				<label ng-show="fontPref.selector === 'class'">
+					<input type="text" class="size1of1 border-box" ng-model="fontPref.classSelector" ng-model-options="{updateOn: 'blur'}" placeholder=".icon">
+				</label>
+			</fieldset>
+			<h1 class="fs5 mlnm" ng-class="{fgc10: showMetricsFocused, mbn: !fontPref.showMetrics}">
+				<label class="hoverE0">
+					<i class="btn5 icon-{{fontPref.showMetrics ? 'bottom' : 'right'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="fontPref.showMetrics" ng-focus="showMetricsFocused = true" ng-blur="showMetricsFocused = false">
+					Font Metrics
+				</label>
+			</h1>
+			<fieldset ng-show="fontPref.showMetrics" class="clearfix">
+				<label class="unit size1of1 mbm">
+					<span class="unit ptt">Em Square Height (power of 2)</span>
+					<mi-number class="border-box miNumber unitRight width3" model="fontPref.metrics.emSize" min="512" max="8192"></mi-number>
+				</label>
+				<label class="unit size1of1 mbm">
+					<span class="unit ptt">Baseline Height (% Em)</span>
+					<mi-number class="border-box miNumber unitRight width3" model="fontPref.metrics.baseline" min="-50" max="50"></mi-number>
+				</label>
+				<label class="unit size1of1 mbm">
+					<span class="unit ptt">Whitespace Width (% Em)</span>
+					<mi-number class="border-box miNumber unitRight width3" model="fontPref.metrics.whitespace" min="0" max="1000"></mi-number>
+				</label>
+			</fieldset>
+			<h1 class="fs5 mlnm" ng-class="{fgc10: showMetadataFocused, mbn: !fontPref.showMetadata}">
+				<label class="hoverE0">
+					<i class="btn5 icon-{{fontPref.showMetadata ? 'bottom' : 'right'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="fontPref.showMetadata" ng-focus="showMetadataFocused = true" ng-blur="showMetadataFocused = false">
+					Metadata
+				</label>
+			</h1>
+			<fieldset ng-show="fontPref.showMetadata">
+				<!-- <label class="unit size1of1 mbm">
+					<span class="blk">Font ID</span>
+					<input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="fontPref.metadata.fontId" class="size1of1 border-box" />
+				</label> -->
+				<label class="unit size1of1 mbm">
+					<span class="blk">URL</span>
+					<input type="url" ng-model-options="{updateOn: 'blur'}" ng-model="fontPref.metadata.fontURL" class="size1of1 border-box">
+				</label>
+				<label class="unit size1of1 mbm">
+					<span class="blk">Description</span>
+					<input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="fontPref.metadata.description" class="size1of1 border-box">
+				</label>
+				<label class="unit size1of1 mbm">
+					<span class="blk">Copyright</span>
+					<input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="fontPref.metadata.copyright" class="size1of1 border-box">
+				</label>
+				<label class="unit size1of1 mbm">
+					<span class="blk">Designer</span>
+					<input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="fontPref.metadata.designer" class="size1of1 border-box">
+				</label>
+				<label class="unit size1of1 mbm">
+					<span class="blk">Designer's URL</span>
+					<input type="url" ng-model-options="{updateOn: 'blur'}" ng-model="fontPref.metadata.designerURL" class="size1of1 border-box">
+				</label>
+				<label class="unit size1of1 mbm">
+					<span class="blk">License</span>
+					<input type="text" ng-model-options="{updateOn: 'blur'}" ng-model="fontPref.metadata.license" class="size1of1 border-box">
+				</label>
+				<label class="unit size1of1 mbm">
+					<span class="blk">License URL</span>
+					<input type="url" ng-model-options="{updateOn: 'blur'}" ng-model="fontPref.metadata.licenseURL" class="size1of1 border-box">
+				</label>
+			</fieldset>
+			<h1 class="fs5 mlnm" ng-class="{fgc10: showVersionFocused, mbn: !fontPref.showVersion}">
+				<label class="hoverE0">
+					<i class="btn5 icon-{{fontPref.showVersion ? 'bottom' : 'right'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="fontPref.showVersion" ng-focus="showVersionFocused = true" ng-blur="showVersionFocused = false">
+					Version
+				</label>
+			</h1>
+			<fieldset ng-show="fontPref.showVersion">
+				<label class="unit size1of4 mbm">
+					<span class="blk">Major</span>
+					<mi-number model="fontPref.metadata.majorVersion" def="1" min="1" max="9999" class="border-box miNumber width3"></mi-number>
+				</label>
+				<label class="unit size1of4 mbm mll">
+					<span class="blk">Minor</span>
+					<mi-number model="fontPref.metadata.minorVersion" min="0" max="9999" class="border-box miNumber width3"></mi-number>
+				</label>
+			</fieldset>
+		</div>
+		</div>
+	</div> <!-- End of Preferences Panel -->
+	<div ng-if="visiblePanels.reset" class="overlay" ng-click="visiblePanels.reset = false">
+		<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+		<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.reset = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+        <p class="mtn">Specify a range to reset character codes or ligatures. You can find a glyph's index by hovering over it.</p>
+        <form>
+            <label mi-focus-when="{{visiblePanels.reset !== false}}">from #
+		    <mi-number min="1" def="1" max="numOfGlyphs" model="tmp.resetFrom" class="iblk miNumber width3 mrl"></mi-number>
+            </label>
+            <label>
+            to #
+		    <mi-number min="1" max="numOfGlyphs" model="tmp.resetTo" class="iblk miNumber width3 mrl"></mi-number>
+            </label>
+        </form>
+        <h2 class="fs5 mlnm mtl" ng-class="tmp.showResetCodes ? 'mbl' : 'mbn'">
+            <label class="hoverE0" ng-class="{'fgc10': resetCodesFocused}">
+                <i class="btn5 icon-{{tmp.showResetCodes ? 'bottom' : 'right'}}"></i>
+                <input class="visuallyhidden" type="checkbox" ng-model="tmp.showResetCodes" ng-blur="resetCodesFocused = false" ng-focus="resetCodesFocused = true">
+                Reset Codes
+            </label>
+	    </h2>
+		<form ng-show="tmp.showResetCodes">
+		<div class="clearfix">
+		<label><span class="m0-hidden">Start with </span>U+
+		<mi-number radix="16" min="32" def="59648" max="1114112 - numOfGlyphs" model="fontPref.resetPoint" class="iblk miNumber width3 mrl"></mi-number>
+		</label>
+		<label class="btn5 mrm"><input type="radio" class="invisible" ng-click="fontPref.resetPoint = 59648"><span class="fs7">PUA</span></label>
+		<label class="btn5 mrm"><input class="invisible" type="radio" ng-click="fontPref.resetPoint = 33"><span class="fs7">Basic Latin</span></label>
+		</div>
+		<button type="submit" class="mtl btn0 size1of1" ng-click="resetCodes(tmp.resetFrom - 1, tmp.resetTo - 1)">Reset Codes</button>
+		</form>
+        <h2 class="fs5 mlnm mtl" ng-class="tmp.showResetLiga ? 'mbl' : 'mbn'">
+            <label class="hoverE0" ng-class="{'fgc10': resetLigaFocused}">
+                <i class="btn5 icon-{{tmp.showResetLiga ? 'bottom' : 'right'}}"></i>
+                <input class="visuallyhidden" type="checkbox" ng-model="tmp.showResetLiga" ng-blur="resetLigaFocused = false" ng-focus="resetLigaFocused = true">
+                Reset Ligatures
+            </label>
+	    </h2>
+        <form ng-show="tmp.showResetLiga">
+		<fieldset class="clearfix">
+			<label class="unit size1of1 btn5 fgc3 mbm" ng-class="{'fgc10': fromTagsFocused}">
+				<i class="icon-radio-{{fontPref.ligaReset === 'tags' ? 'checked' : 'unchecked'}}"></i>
+				<input class="visuallyhidden" name="ligaReset" value="tags" type="radio" ng-model="fontPref.ligaReset" ng-focus="fromTagsFocused = true" ng-blur="fromTagsFocused = false">
+				Use tags
+			</label>
+			<label class="unit size1of1 btn5 fgc3 mbm" ng-class="{'fgc10': fromNamesFocused}">
+				<i class="icon-radio-{{fontPref.ligaReset === 'names' ? 'checked' : 'unchecked'}}"></i>
+				<input class="visuallyhidden" name="ligaReset" value="names" type="radio" ng-model="fontPref.ligaReset" ng-focus="fromNamesFocused = true" ng-blur="fromNamesFocused = false">
+				Use names
+			</label>
+		</fieldset>
+		<button type="submit" class="mtl btn0 size1of1" ng-click="resetLigatures(tmp.resetFrom - 1, tmp.resetTo - 1)">Reset Ligatures</button>
+		</form>
+		</div>
+	</div>
+	<mi-style>
+		@font-face {
+			font-family: 'icomoon-font-tab';
+			src: url({{localFont}}) format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+		.ff-icomoon-font-tab {
+			font-family: 'icomoon-font-tab', sans-serif;
+		}
+		.glyphName {
+			padding-bottom: {{10 / 128 + max(fontPref.metrics.baseline / 100, 0)}}em;
+		}
+	</mi-style>
+	<div class="w-main phm">
+	<h1 class="rel fs3 mtn m1-fs5 print-hidden">
+		<label>
+			<i class="btn5 mrs icon-{{pref.showQuickUse ? 'bottom' : 'right'}}"></i>
+			<input class="hidden" type="checkbox" ng-model="pref.showQuickUse">
+			<span class="noOverflow3"><span class="hoverE0">Quick Usage <span class="fs6-fixed">and</span> Sharing</span>
+				<span ng-show="fontPref.autoHost" class="fs6-fixed ff0 mls fgc4"><i class="mrs icon-{{quickUsage.icon}}"></i>{{quickUsage.statusMessage}}</span>
+			</span>
+		</label>
+	</h1>
+	<div class="fgc3 clearfix print-hidden" ng-if="fontPref.autoHost && pref.showQuickUse">
+		<h1 ng-show="cloudAccess || pref.fontUploadTime" class="blk mvn fs6"><span class="fs4">Development Links</span> <span class="fs6"></span>
+		</h1>
+		<input class="textbox1 fgc3 ff-code size1of1 border-box" type="text" mi-select-all="" readonly="readonly" value="<link rel=&quot;stylesheet&quot; href=&quot;{{quickUsage.url||'...'}}&quot;>">
+        <p class="mvn" ng-show="quickUsage.url">
+            <a class="prs" target="_blank" href="{{quickUsage.url.slice(0, -9).replace('public/', 'public/reference.html#/')}}">reference.html</a>
+            | <a class="phs" target="_blank" href="{{quickUsage.url.slice(0, -9) + 'selection.json'}}">selection.json</a>
+            <span ng-show="fontPref.cssVars && quickUsage.url">
+                | <a class="phs" target="_blank" href="{{quickUsage.url}}">style.css</a>
+                | <a class="phs" target="_blank" href="{{quickUsage.url.slice(0, -9) + 'variables.' + fontPref.cssVarsFormat}}">variables.{{fontPref.cssVarsFormat}}</a>
+                | <a class="pls" target="_blank" href="{{quickUsage.url.slice(0, -3) + fontPref.cssVarsFormat}}">style.{{fontPref.cssVarsFormat}}</a>
+            </span>
+        </p>
+		<p class="mtm" ng-show="cloudAccess">Do not use these links in production.</p>
+		<p class="mtm" ng-hide="cloudAccess">These links <span class="fgc0">expire in 24 hours</span>. To get permanent unchanging links, <a target="_blank" href="https://icomoon.io/#premium">Go Premium</a>.</p>
+		<div ng-show="quickUsage.url2 || pref.fontUploadTime">
+		<h1 class="fs4 mbn">Production Links</h1>
+		<p class="mtn mbm">Last uploaded on <span class="fgc1" ng-bind="pref.fontUploadTime"></span>
+		<button class="btn6" ng-click="hostFont()" ng-disabled="quickUsage.hostingDisabled"><i class="icon-upload iconfont-zero-baseline"></i> {{quickUsage.updateCaption || 'Update'}}</button></p>
+		<div class="clearfix mbm">
+			<label for="url2" class="unit width1 ptt mrs"><a target="_blank" href="{{quickUsage.url2}}"><i class="mrs icon-infinite"></i></a>Amazon S3</label>
+			<div class="lastUnit"><input id="url2" class="textbox1 fgc3 ff-code size1of1 border-box" type="text" mi-select-all="" readonly="readonly" value="<link rel=&quot;stylesheet&quot; href=&quot;{{quickUsage.url2}}&quot;>">
+			</div>
+		</div>
+		<div class="clearfix">
+			<label for="url3" class="unit width1 ptt mrs">
+                <a ng-if="quickUsage.url3 !== '...'" target="_blank" href="{{quickUsage.url3}}"><i class="mrs icon-infinite"></i></a>
+                <svg ng-if="quickUsage.url3 === '...'" class="mrs icon-spinner spinner"><use xlink:href="#icon-spinner"></use></svg>
+                CloudFront
+            </label>
+			<div class="lastUnit"><input id="url3" class="textbox1 fgc3 size1of1 ff-code border-box" type="text" mi-select-all="" readonly="readonly" value="<link rel=&quot;stylesheet&quot; href=&quot;{{quickUsage.url3}}&quot;>"></div>
+		</div>
+		<!--p class="mtm"><i class="icon-info mrs"></i>Updating files on CloudFront takes 10 to 15 minutes.</p-->
+		</div>
+		<div class="pbl mtm">
+			<button class="btn6 phn mrl" ng-click="fontPref.autoHost = false">Disable Quick Usage</button>
+			<form class="iblk" action="https://codepen.io/pen/define" method="POST" target="_blank">
+			  <input type="hidden" name="data" value="{{onlineEditor.data}}">
+			  <button type="submit" ng-disabled="!onlineEditor.data || onlineEditor.disabled" class="btn6 pan">
+			  <i class="icon-codepen mrs"></i>View on CodePen
+			  </button>
+			</form>
+		</div>
+	</div>
+	<div class="pbl clearfix print-hidden" ng-if="!fontPref.autoHost && pref.showQuickUse">
+		<p class="mvn w-text"><button class="phn btn6 pvn lh-def bshadow-ul3" ng-click="hostFont({onlyDev: true, enable: true})">Enable Quick Usage</button> to upload fonts for hosting or sharing. Using this feature, you can reference your fonts in HTML and easily change your icon selection on the fly, without having to update your CSS.</p>
+	</div>
+	<h1 class="rel fs3 m1-fs5 print-hidden">
+		<label>
+			<i class="btn5 mrs icon-{{pref.showGlyphs ? 'bottom' : 'right'}}"></i>
+			<input class="hidden" type="checkbox" ng-model="pref.showGlyphs">
+			<span class="noOverflow3 hoverE0">Glyphs: {{numOfGlyphs}}
+				<span class="fs6-fixed ff0 mls transparent" ng-show="ttfSize">TTF Size: {{ttfSize}}</span>
+			</span>
+		</label>
+	</h1>
+	<div ng-show="pref.showGlyphs">
+    <p ng-if="hasMulticolor"><i class="icon-info bg-circle mrs"></i>Multicolor glyphs take more than one character code and cannot have ligatures. <button class="btn6 phn" ng-click="showMulticolorWarning()">Learn&nbsp;More&hellip;</button></p>
+	<p ng-show="!glyphSets.length">Nothing to show! Please <a href="#/select">select</a> some icons first.</p>
+	<div id="glyphSet{{$index}}" class="mbm clearfix" ng-repeat="glyphs in glyphSets">
+		<mi-style>
+		#glyphSet{{$index}} .fs-prevSize {
+			font-size: {{glyphs[0].properties.prevSize}}px;
+		}
+		</mi-style>
+		<h1 class="ff0 mtn fs6 fgc4 bshadow-ul2">
+			Grid Size: {{glyphs.grid || 'Unknown'}}
+			<!-- <button ng-show="!glyphs.grid" class="btn5 fgc4 transparent phm"><i class="icon-reset2"></i></button> -->
+			<mi-presets mi-tooltip="{marginBottom: 12, marginRight: 12, text: 'Preview Size'}" class="prevSize mtn unitRight numberPresets fs6-fixed lh-def ff0" model="glyphs[0].properties.prevSize" min="6" max="80" presets="getMultiples(glyphs.grid)"></mi-presets>
+		</h1>
+		<div class="glyph unit clearfix fs-prevSize pbs hoverE-hidden-parent" ng-repeat="glyph in glyphs" ng-show="!glyph.hide && (!search || searchResults[glyph.setId][glyph.iconIdx])">
+			<div class="clearfix rel">
+			<div class="rel unit size1of1 bshadow-ul0 clearfix noOverflow">
+				<span ng-click="editGlyph(glyph)" class="cursor-pointer noSelection lh2 ff-icomoon-font-tab fs-prevSize fgc2">
+					<span ng-if="!glyph.icon.isMulticolor && !glyph.icon.attrs[0].fill">{{glyph.properties.tempChar}}</span>
+					<span style="{{stringifyAttrs(glyph.icon.attrs[0], {css:true})}}" ng-if="!glyph.icon.isMulticolor && glyph.icon.attrs[0].fill">{{glyph.properties.tempChar}}</span>
+					<span ng-if="glyph.icon.isMulticolor" ng-repeat="tChar in glyph.properties.tempChar" style="{{stringifyAttrs(glyph.icon.attrs[$index], {css:true})}} margin-left: {{glyph.marginLeft[$index]}}">{{tChar}}</span>
+				</span>
+				<div class="glyphNameWrapper mls">
+					<span class="invisible">uniE</span>
+					<span mi-blur-on-enter="" spellcheck="false" class="ff0 glyphName" mi-editable="" mi-invalid-class="bshadow-ul111" mi-unique="glyphNames" mi-tags="" ng-model="glyph.properties.name" mi-model-delay="blur"></span>
+				</div>
+			</div>
+			<button ng-click="removeGlyph(glyph)" class="glyph-button btn5 fs6-fixed"><i class="icon-cancel2"></i><span class="visuallyhidden">Remove Glyph</span></button>
+			</div>
+			<div class="codePoint clearfix fs6-fixed">
+				<div class="rel clearfix bshadow-ul0" ng-show="pref.showCodes">
+					<label class="unit size1of2">
+						<mi-number mi-blur-on-enter="" model="glyph.properties.code" radix="16" invalid-class="bshadow-error" min="32" max="1114111" char-input="size1of2 unitRight talign-right" validator="validateCode">
+						</mi-number>
+					</label>
+                    <!--<button ng-click="showEncoding($parent.$index, $index)" class="glyph-button btn5"><i class="icon-reset"></i><span class="visuallyhidden">Reset Codes</span></button>-->
+                    <button ng-click="showUniCharts(glyph)" class="glyph-button btn5"><i class="icon-smile2"></i><span class="visuallyhidden">Show Unicode Charts</span></button>
+				</div>
+				<div class="rel" ng-show="pref.showLiga">
+					<label class="unit clearfix size1of1 bshadow-ul0">
+						<i class="icon-liga lh2 fgc4 unit"></i>
+						<input mi-blur-on-enter="" ng-disabled="glyph.icon.isMulticolor" pattern=".{2,}" type="text" ng-class="glyph.ligaWarning ? 'bshadow-warning' : ''" mi-unique="ligatures" ng-model="glyph.properties.ligatures" mi-tags="" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 500, 'blur': 0} }" class="liga" placeholder="ligature1, ligature2">
+					</label>
+                    <!--<button ng-click="showLiga($parent.$index, $index)" class="glyph-button btn5"><i class="icon-reset"></i><span class="visuallyhidden">Reset Ligatures</span></button>-->
+				</div>
+				<button ng-click="getEmbedCode(glyph)" class="unit btn5 pln hoverE-hidden-target2"><i class="icon-code mrs"></i>Get Code</button>
+                <button ng-click="showMulticolorWarning()" ng-show="fewMulticolors && glyph.icon.isMulticolor" class="unitRight btn5 prn"><i class="icon-info mrs"></i>Multicolor</button>
+                <span class="unitRight fgc4 hoverE-hidden-target2 mts" ng-show="!(fewMulticolors && glyph.icon.isMulticolor)">#{{glyph.idx + 1}}</span>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	<div ng-if="visiblePanels.warnings === true" class="overlay" ng-click="visiblePanels.warnings = false">
+		<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+		<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.warnings = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+		<ul class="noListStyle">
+			<li ng-show="ligaWarning">Ligatures with special characters or numbers may not work as expected in some browsers.</li>
+		</ul>
+		</div>
+	</div>
+	<div ng-if="visiblePanels.uniCharts === true" class="overlay" ng-click="visiblePanels.uniCharts = false">
+		<div class="overlayWindow overlayWindow-large m2-size3of4 m1-size4of5" mi-absorb-clicks="" on-click="assignCode(e)">
+		<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.uniCharts = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+        <form>
+            <h1 class="fs4 mtn">Unicode Symbols</h1>
+            <p>By selecting a Unicode character below, you can assign its code point to your glyph.<br>You can also use services like <a target="_blank" href="http://emojipedia.org">emojipedia.org</a> or <a target="_blank" href="http://emojifinder.com">emojifinder.com</a> to find appropriate characters.</p><p>Note that Unicode characters visualization will depend on the character support of your web browser and the fonts installed on your system.</p>
+            <div id="uniCharts" ng-bind-html="uniCharts"></div>
+        </form>
+		</div>
+	</div>
+	<div ng-if="visiblePanels.getcode === true" class="overlay" ng-click="visiblePanels.getcode = false">
+		<div class="overlayWindow w-text m2-size3of4 m1-size4of5" mi-absorb-clicks="">
+		<button class="absl pan pat top-right btn5 hoverE-icon" ng-click="visiblePanels.getcode = false">
+			<i class="icon-close fs3 mvn lh1" data-icon2="&#xe611;"></i>
+			<span class="visuallyhidden">Close</span>
+		</button>
+		<label class="blk mbl" mi-focus-when="{{visiblePanels.getcode}}">HTML
+			<input class="fgc3 textbox1 ff-code size1of1 border-box" type="text" mi-select-all="" readonly="readonly" value="{{embedCodes.html}}">
+		</label>
+		<label ng-if="embedCodes.htmlLiga" class="blk mbl">HTML (using ligatures)
+			<input class="fgc3 textbox1 ff-code size1of1 border-box" type="text" mi-select-all="" readonly="readonly" value="{{embedCodes.htmlLiga}}">
+		</label>
+		<label class="blk mbl">CSS
+			<textarea wrap="off" rows="{{embedCodes.cssLines || 3}}" class="fgc3 textbox1 noOverflow ff-code size1of1 border-box" readonly="readonly" mi-select-all="">{{embedCodes.css}}</textarea>
+		</label>
+        <div class="clearfix">
+		<label class="unit size1of2 prt">HTML Entity
+			<input class="fgc3 textbox1 ff-code size1of1 border-box" type="text" mi-select-all="" readonly="readonly" value="{{embedCodes.htmlEntity}}">
+		</label>
+        <label class="unit size1of2 plt">Character
+			<input class="ff0 fgc3 textbox1 size1of1 border-box" type="text" mi-select-all="" readonly="readonly" value="{{embedCodes.character}}">
+		</label>
+        </div>
+		<p ng-if="!pref.showCodes" class="mbn"><i class="icon-info"></i> To edit glyph codes, press the <i class="icon-unicode pat bgc6 rndt"></i> button in the toolbar.</p>
+		<p ng-if="!pref.showLiga" class="mbn" ng-class="{'mts': !pref.showCodes}"><i class="icon-info"></i> To add or edit ligatures, press the <i class="icon-liga pat bgc6 rndt"></i> button in the toolbar.</p>
+		</div>
+	</div>
+	
+	<div class="pln bar-btm talign-center print-hidden">
+		<div class="w-main phm m0-phn">
+		<a href="#/select/image" class="btn9 iblk size1of3 m0-size2of5 sep-left {{getSelectionCount() === 0 ? 'transparent-more': ''}}">
+			<i class="mrs icon-image"></i><span class="m1-hidden rel">Generate </span>SVG<span class="m3-unhidden">, &hellip;</span><span class="m3-hidden"> &amp; More</span></a><a href="#/select" class="btn9 size1of3 m0-size1of5 rel">Select<span class="m0-hidden">ion</span><span class="m1-hidden"> ({{getSelectionCount()}})</span><span class="chevron-right absl top-right layer-front m0-hidden"></span><span class="chevron-left absl top-left layer-front m0-hidden"></span></a><span class="btn9 iblk size1of3 m0-size2of5 sep-right selected rel">
+			<span class="fs7 fgc4 absl size1of1 top-left lh3 mts cursor-default">Font</span><button ng-click="download()" ng-disabled="downloading" class="btn4"><span ng-if="!downloading">Download</span><span ng-if="downloading">Loading&hellip;</span></button>
+			<button class="absl btn6 fgc4 lh-def mls pht m1-hidden" ng-click="visiblePanels.fontPref = true"><i class="icon-cog"></i></button>
+		</span>
+		</div>
+	</div>
+
+</div>

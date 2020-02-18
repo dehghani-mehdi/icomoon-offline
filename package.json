@@ -1,0 +1,11 @@
+{
+  "name": "icomoon-offline",
+  "version": "0.0.1",
+  "description": "Unoffical icomoon offline app, works with any browser.",  
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["icomoon", "offline", "app", "firefox", "chrome", "edge"],
+  "author": "Keyamoon and Mehdi Dehghani",
+  "license": "MIT"
+}

@@ -1,0 +1,90 @@
+<div class="m1-mtnl" mi-file-over="">
+	<div class="bar-top">
+		<div class="rel">
+			<button class="unit btn0 mlm mrl m0-mrs m0-mlm" mi-popup="focus">
+				<i class="icon-menu"></i>
+				<span class="visuallyhidden">Menu</span>
+			</button>
+			<ul class="w-menu absl layer-front2 menuList1 mtxl ptm talign-left hidden">
+				<li><button ng-disabled="newProjectDisabled" ng-click="newProject()"><i class="mrs icon-new"></i>New Project</button></li>
+				<div class="file size1of1 lh2">
+					<mi-file focused="importFocused" type-regex=".json|text|plain" on-open="import(files)"></mi-file>
+					<span class="menuItem" ng-class="importFocused ? 'focused' : ''"><i class="mrs icon-import"></i>Import Project</span>
+				</div>
+				<li ng-hide="signedIn"><a href="https://icomoon.io/#login#redirect#https%3A%2F%2Ficomoon.io%2Fapp"><i class="icon-enter mrs"></i>Sign In</a></li>
+				<li ng-show="signedIn"><a href="https://i.icomoon.io/logout"><i class="icon-exit mrs"></i>Sign Out</a></li>
+				<li><a target="_blank" href="https://icomoon.io/#docs"><i class="icon-question mrs"></i>Documentation</a></li>
+				<!-- <li><button ng-click="reset()">Hard Reset</button></li> -->
+			</ul>
+		</div>
+		<div class="w-main phm">
+			<header class="unit ptt mrl m0-mrm"><h1 class="fs4 mvn lh1 m0-mls m0-fs5">Projects</h1></header>
+			<label class="unit" ng-show="projectsReady">
+				<i class="icon-sort prt"></i>
+				<div class="iblk rel mlnm">
+				<button class="btn5 plm" mi-popup="focus">{{order}}</button>
+				<ul class="w-menu absl layer-front2 menuList1 noShadow mtn ptm talign-left hidden">
+					<li><button ng-click="order = 'Date Modified'">Date Modified</button></li>
+					<li><button ng-click="order = 'Date Created'">Date Created</button></li>
+					<li><button ng-click="order = 'Name'">Name</button></li>
+				</ul>
+				</div>
+			</label>
+			<!-- <h1 class="fs5 mvn ptt unit">Manage Projects</h1> -->
+		</div>
+		<span class="unitRight mvn mrm fgc5 m1-hidden lh0" ng-show="projectsReady">
+			<i ng-show="cloudAccess" class="fs3 lh1 icon-{{isSyncing() ? 'sync fgc-warning' : 'icomoon'}}"></i>
+			<a target="_blank" ng-show="!cloudAccess" href="https://icomoon.io/#hi" class="fgc4 transparent hoverE-icon"><i class="icon-neutral lh1 fs3" data-icon2="&#xe63f;"></i><span class="visuallyhidden">Hi!</span></a>
+		</span>
+	</div>
+	<div ng-show="!projectsReady" class="w-main phm">
+		<p><svg class="mrs icon-spinner spinner"><use xlink:href="#icon-spinner"></use></svg> Loading projects&hellip;</p>
+	</div>
+	<div ng-show="projectsReady" class="w-main">
+		<div class="rel phm">
+		<div mi-file-zone="" class="miFileZone bgc10-transparent transparent rndt absl top-left layer-front size1of1 height1of1 bshadow-ods" drag-class="transparent-none" type-regex=".json|text|plain" on-open="import(files)">
+		</div>
+		<ul ng-show="projects.length" class="noListStyle clearfix mvn ptm">
+			<li class="clearfix bshadow-ul0 mbl" ng-class="{'hoverE-hidden-parent': !projects.disabled}" ng-repeat="project in projects">
+				<input ng-focus="focused = true" ng-blur="focused = false" tabindex="{{$index}}1" class="textbox0 unit size1of2" ng-model="project.metadata.name" ng-model-options="{ updateOn: 'blur'}" type="text">
+				<fieldset ng-class="(focused || project.loading) ? '' : 'hoverE-hidden-target'">
+				<button ng-disabled="projects.disabled" ng-focus="focused = true" ng-blur="focused = false" tabindex="{{$index}}4" class="fgc2 btn5 unitRight plm prn" ng-click="removeProject(project.idx, $index)">
+					<span class="transparent m1-hidden">Remove</span>
+					<i class="icon-cancel2 mls"></i>
+				</button>
+				<button ng-disabled="projects.disabled" ng-focus="focused = true" ng-blur="focused = false" tabindex="{{$index}}3" class="fgc2 btn5 unitRight phm" ng-click="downloadProject(project.idx)">
+					<span class="transparent m1-hidden">Download</span>
+					<i class="icon-download mls"></i>
+				</button>
+				<button ng-disabled="projects.disabled" ng-focus="focused = true" ng-blur="focused = false" tabindex="{{$index}}2" class="fgc2 btn5 unitRight phm disabled-bold rel" ng-click="loadProject(project.idx, project)">
+					<span class="m1-hidden" ng-class="{'transparent': !project.loading}">Load<span ng-show="project.loading">ing&hellip;</span></span>
+					<i ng-show="!project.loading" class="icon-right2 mls"></i>
+					<svg ng-show="project.loading && !project.progress" class="mls icon-spinner spinner valign-top"><use xlink:href="#icon-spinner"></use></svg>
+					<svg class="mls valign-top" ng-if="project.progress" width="16" height="16">
+						<circle cx="8" cy="8" r="7" stroke-width="2" stroke="#ddd" fill="none"></circle>
+						<circle transform="translate(8 8) rotate(-90) translate(-8 -8)" cx="8" cy="8" r="7" stroke-width="2" stroke="currentcolor" stroke-dasharray="0 44 44 0" stroke-dashoffset="-{{project.progress * 44}}" fill="none"></circle>
+					</svg>
+				</button>
+				</fieldset>
+			</li>
+		</ul>
+		</div>
+		<div class="mhm">
+			<button ng-disabled="newProjectDisabled" class="blk btn5 mbs phn" ng-click="newProject()"><i class="icon-new mrs"></i>New Project</button>
+			<div class="file iblk fgc3">
+				<mi-file focused="importFocused2" type-regex=".json|text|plain" on-open="import(files)"></mi-file>
+				<span class="btn5 phn" ng-class="importFocused2 ? 'focused' : ''"><i class="icon-import mrs"></i><span>Import Project</span></span>
+			</div>
+            <p ng-show="!cloudAccess" class="w-text"><i class="icon-warning fgc10 mrs"></i><em class="visuallyhidden">Note: </em>Your changes and your projects only get stored in your browser's cache. Clearing your browsing data will result in losing your projects.<br><a href="https://icomoon.io/#premium">Become a premium member</a> to save your data in cloud.</p>
+		</div>
+	</div>
+	<div class="pln bar-btm talign-center print-hidden">
+		<div class="w-main phm m0-phn">
+		<a href="#/select/image" class="btn9 iblk size1of3 sep-left {{selectionCount === 0 ? 'transparent-more' : ''}}">
+			<i class="mrs icon-image"></i><span class="m1-hidden rel">Generate </span>SVG<span class="m3-unhidden">, &hellip;</span><span class="m3-hidden"> &amp; More</span></a><a href="#/select" class="btn9 size1of3 rel">Selection <span class="m1-hidden">({{selectionCount || '0'}})</span><span class="chevron-right absl top-right layer-front"></span><span class="chevron-left absl top-left layer-front"></span></a><a href="#/select/font" class="btn9 iblk size1of3 sep-right {{selectionCount === 0 ? 'transparent-more' : ''}}">
+			<span class="m1-hidden">Generate </span>Font<i class="mls icon-font icon-low"></i>
+		</a>
+		
+		</div>
+	</div>
+</div>

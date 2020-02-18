@@ -1,0 +1,85 @@
+<div ng-show="tab === 'select.library'" class="m1-mtnl">
+	<div ng-repeat="iconSets in collections">
+	<div class="bgc8 bshadow-bar" ng-if="iconSets.premium">
+	<p ng-if="!cloudAccess" class="w-main phm talign-center pvm mtn">
+	    <span>Become a <a href="https://icomoon.io/#premium/r3f02">premium member</a> to unlock the following sets.</span>
+	</p>
+	<p ng-if="cloudAccess" class="w-main phm talign-center pvm mtn">
+	    <span>The following sets come with your premium membership.</span>
+	</p>
+	</div>
+	<div class="w-main phm talign-center">
+	<section class="card mbl mhm" ng-repeat="set in iconSets">
+		<header class="lh0">
+			<a rel="noopener noreferrer {{set.nofollow ? 'nofollow' : ''}}" target="_blank" ng-href="{{set.url}}">
+				<img ng-src="{{set.image}}">
+			</a>
+		</header>
+		<span class="blk mtm talign-left fgc0">{{set.name}}</span>
+		<dl class="dl0 mtn mbm fgc3">
+			<dt>Glyphs Available</dt>
+			<dd>{{set.icons}}</dd>
+			<dt>Grid Size</dt>
+			<dd>{{set.grid}}</dd>
+			<dt>Designer</dt>
+			<dd ng-if="set.designerURL"><a rel="{{set.nofollow ? 'nofollow' : ''}}" ng-href="{{set.designerURL}}">{{set.designer}}</a></dd>
+            <dd ng-if="!set.designerURL">{{set.designer}}</dd>
+			<dt>License</dt>
+			<dd><a rel="{{set.nofollow ? 'nofollow' : ''}}" ng-href="{{set.licenseURL}}">{{set.license}}</a></dd>
+		</dl>
+		<div class="ribbon" ng-class="set.latest ? '' : 'warning'" ng-show="set.added"><i class="icon-check"></i></div>
+		<button ng-if="set.hasAccess === true" ng-disabled="set.button.disabled" ng-click="addremove(set)" class="btn0 rel size1of1">
+			<i class="absl top-left lh1 mts mls icon-{{set.button.icon}}"></i>
+			{{set.button.disabled ? set.button.caption2 : set.button.caption}}{{set.button.disabled ? '&hellip;' : ''}}
+		</button>
+		<a ng-if="!set.hasAccess" ng-href="{{set.purchaseLink}}" class="btn0 size1of1 rel">
+			<i class="absl lh1 top-left mls mts {{set.premium ? 'icon-icomoon' : 'icon-cart'}}"></i>
+			{{set.premium ? 'Go Premium' : 'Purchase'}}
+		</a>
+		<button ng-if="set.hasAccess === 'loading'" disabled="disabled" class="btn0 rel size1of1">
+			<svg class="absl top-left mts mls icon-spinner spinner"><use xlink:href="#icon-spinner"></use></svg>
+			Verifying&hellip;
+		</button>
+	</section>
+	</div>
+	</div>
+<!-- 	<div class="grad-lighten clearfix phm">
+		<div class="w-text centered">
+			<h1 class="fs3 m1-fs5 talign-center">Submit an Icon Pack</h1>
+			<div class="talign-center" ng-show="packSubmission.submitted">
+				<p>Thank you. Your request was successfully&nbsp;sent.</p>
+			</div>
+			<form ng-show="!packSubmission.submitted" name="form">
+			<p class="talign-left">We value quality over quantity. Only the highest quality icon packs get added to IcoMoon's library. We review each set, icon by icon, to decide whether or not it qualifies for IcoMoon's library.</p>
+			<fieldset class="clearfix talign-left">
+				<label class="unit size1of1 mbm"><span class="blk">Icon Pack URL</span><input name="url" ng-model="packSubmission.url" placeholder="http(s)" class="size1of1 border-box bgc8" type="url" /></label>
+				<label class="unit size1of1 mbm"><span class="blk">Your Email (optional)</span><input name="email" ng-model="packSubmission.email" placeholder="@" class="size1of1 border-box bgc8" type="email" /></label>
+				<label class="unit mbm size1of1 btn5 fgc3" ng-class="{'fgc10': pperfectFocused}">
+					<i class="{{pixelPerfect ? 'icon-checked' : 'icon-unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="pixelPerfect" 
+					ng-focus="pperfectFocused = true" ng-blur="pperfectFocused = false" />
+					The icons are pixel-perfect</span>
+				</label>
+				<label class="unit mbm size1of1 btn5 fgc3" ng-class="{'fgc10': goodLicenseFocused}">
+					<i class="{{goodLicense ? 'icon-checked' : 'icon-unchecked'}}"></i>
+					<input class="visuallyhidden" type="checkbox" ng-model="goodLicense" 
+					ng-focus="goodLicenseFocused = true" ng-blur="goodLicenseFocused = false" />
+					The icon pack's license allows redistribution by IcoMoon</span>
+				</label>
+			</fieldset>
+			<div class="talign-center mtm">
+				<button ng-click="submitPack()" ng-disabled="!pixelPerfect || !goodLicense || packSubmission.sending || (!packSubmission.url || !form.url.$valid) || !form.email.$valid" class="btn0 size1of3 m0-size1of1 mbl">{{packSubmission.sending ? 'Sending...' : 'Submit'}}</button>
+			</div>
+			</form>
+		</div>
+	</div> -->
+	<div class="pln bar-btm talign-center print-hidden">
+		<div class="w-main phm m0-phn">
+		<a href="#/select/image" class="btn9 iblk size1of3 sep-left {{getSelectionCount() === 0 ? 'transparent-more' : ''}}">
+			<i class="mrs icon-image"></i><span class="m1-hidden rel">Generate </span>SVG<span class="m3-unhidden">, &hellip;</span><span class="m3-hidden"> &amp; More</span></a><a href="#/select" class="btn9 size1of3 rel">Selection <span class="m1-hidden">({{getSelectionCount()}})</span><span class="chevron-right absl top-right layer-front"></span><span class="chevron-left absl top-left layer-front"></span></a><a href="#/select/font" class="btn9 iblk size1of3 sep-right {{getSelectionCount() === 0 ? 'transparent-more' : ''}}">
+			<span class="m1-hidden">Generate </span>Font<i class="mls icon-font icon-low"></i>
+		</a>
+		
+		</div>
+	</div>
+</div>

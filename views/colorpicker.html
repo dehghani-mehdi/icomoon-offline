@@ -1,0 +1,66 @@
+<div class="clearfix mvl">
+<svg class="svgDefs">
+	<defs>
+        <lineargradient id="hueGrad{{::id}}">
+			<stop offset="0%" stop-color="hsl(0, 100%, 50%)"></stop>
+			<stop offset="16.666666667%" stop-color="hsl(60, 100%, 50%)"></stop>
+			<stop offset="33.333333333%" stop-color="hsl(120, 100%, 50%)"></stop>
+			<stop offset="50%" stop-color="hsl(180, 100%, 50%)"></stop>
+			<stop offset="66.666666667%" stop-color="hsl(240, 100%, 50%)"></stop>
+			<stop offset="83.333333333%" stop-color="hsl(300, 100%, 50%)"></stop>
+			<stop offset="100%" stop-color="hsl(360, 100%, 50%)"></stop>
+		</lineargradient>
+		<lineargradient class="satGrad" id="satGrad{{::id}}">
+			<stop offset="0%" stop-color="#ddd"></stop>
+			<stop offset="100%" stop-color="#ddd"></stop>
+		</lineargradient>
+		<lineargradient class="litGrad" id="litGrad{{::id}}">
+			<stop offset="0%" stop-color="#ddd"></stop>
+			<stop offset="50%" stop-color="#ddd"></stop>
+			<stop offset="100%" stop-color="#ddd"></stop>
+		</lineargradient>
+	</defs>
+</svg>
+<div class="clearfix">
+	<label class="unit">
+		<span class="unit pvt">#</span>
+		<mi-number class="unit miNumber width3 talign-center border-box mhs" zpad="6" radix="16" model="num" min="0" max="16777215"></mi-number>
+	</label>
+</div>
+<div class="clearfix mtm">
+	<label class="unit width6">
+		<span class="unit pvt">H</span>
+		<mi-number class="unit miNumber width3 talign-center border-box mhs" model="hsl.h" min="0" max="360"></mi-number>
+	</label>
+	<div class="lastUnit lh0 rel">
+		<input id="hue{{::id}}" class="colorSlider" type="range" tabindex="-1" min="0" max="360">
+		<svg>
+			<rect width="100%" height="1.5em" fill="url(#hueGrad{{::id}})"></rect>
+		</svg>
+	</div>
+</div>
+<div class="clearfix mtm">
+	<label class="unit width6">
+		<span class="unit pvt">S</span>
+		<mi-number class="unit miNumber width3 talign-center border-box mhs" model="hsl.s" min="0" max="100"></mi-number>
+	</label>
+	<div class="lastUnit lh0 rel">
+		<input id="saturation{{::id}}" class="colorSlider" type="range" tabindex="-1" min="0" max="100">
+		<svg>
+		  <rect width="100%" height="1.5em" fill="url(#satGrad{{::id}})"></rect>
+		</svg>
+	</div>
+</div>
+<div class="clearfix mtm">
+	<label class="unit width6">
+		<span class="unit pvt">L</span>
+		<mi-number class="unit miNumber width3 talign-center border-box mhs" model="hsl.l" min="0" max="100"></mi-number>
+	</label>
+	<div class="lastUnit lh0 rel">
+		<input id="lightness{{::id}}" class="colorSlider" type="range" tabindex="-1" min="0" max="100">
+		<svg>
+			<rect width="100%" height="1.5em" fill="url(#litGrad{{::id}})"></rect>
+		</svg>
+	</div>
+</div>
+</div>

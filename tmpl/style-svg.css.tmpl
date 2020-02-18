@@ -1,0 +1,38 @@
+{{selector}} {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;{{bgColor
+{{bgColor}}
+  background-color: {{value}};}}
+}
+
+/* ==========================================
+Single-colored icons can be modified like so:
+.{{prefix}}name{{postfix}} {
+  font-size: 32px;
+  color: red;
+}
+========================================== */
+{{colorTheme
+{{colorTheme}}.{{className}} {
+  fill: {{color}};
+}
+}}{{sets
+{{glyphs
+
+{{classSelector
+{{classSelector}}.{{prefix}}{{glyphName}}{{postfix}} {
+  width: {{w2h}}em;
+}
+}}{{attrs
+{{selector{{s}}}} {
+  fill: {{fill}};{{stroke
+{{stroke}}
+  stroke: {{value}};}}{{opacity
+{{opacity}}
+  opacity: {{value}};}}
+}
+}}}}}}
