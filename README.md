@@ -1,4 +1,4 @@
-# Icomoon Offline App
+# Icomoon Offline
 
 Unofficail icomoon offline app, works with any browser.
 
